@@ -1,0 +1,367 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Listah!</title>
+    
+    
+    <!-- jQuery -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    
+    
+    <!-- angular -->
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script> 
+    
+    <!-- Bootstrap -->
+    <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- custom css -->
+    <link href="css/styles.css" rel="stylesheet">
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lobster&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.snow.css" rel="stylesheet" />
+    <script src="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    
+    <style>
+        @media screen and (max-width: 991px) {
+            .sidebar {
+                width: 100%;
+                height: auto;
+                position: static;
+            }
+            .content {
+                margin-left: 0;
+            }
+        }
+        
+        
+    </style>
+    
+</head>
+<body ng-app="angularApp" ng-controller="angular_controller">
+    
+    
+    
+    <!-- the sidebar -->
+    <div class="sidebar p-3 d-flex flex-column">
+        <h1 class="fw-bold lobster-regular display-3">Listah!</h1>
+        
+        
+        <!-- normal / priority -->
+        <div class="mt-4 d-flex align-items-center justify-content-between rounded p-2" style="background-color: #111315;">
+            <div class="d-grid">
+                <button style="background-color: #272a30; color: #36bcba;" class="btn btn-sm rounded-3 border border-secondary ">All</button>
+            </div>
+            
+            <div class="ms-auto d-grid">
+                <!-- <button class="btn btn-sm btn-dark border border-secondary">Priority</button> -->
+                <a href="javascript:void(0)" class="link link-secondary">Starred</a>
+            </div>
+        </div>
+        
+
+        <div class="mt-auto d-grid">
+            <button class="btn btn-sm btn-dark"><i class="bi bi-box-arrow-right"></i> Log Out</button>
+        </div>
+    </div>    
+    
+    
+    
+    <!-- the content -->
+    <div class="content">
+        
+        
+        
+        <div class="row g-0 justify-content-between">
+            
+            <div class="col-lg-5 col-xl-4 col-xxl-3">
+                <div class="h-100">
+                    
+                    
+                    <!--  -->
+                    
+                    <!-- style="max-height: 100vh; overflow-y: scroll;" -->
+                    <div class="p-2" >
+                        
+                        
+                        <!-- search for a note -->
+                        <div class="my-3">
+                            <p class="fw-bold"><i class="bi bi-search"></i> Search for a note</p>
+                            <input style="border: 1px solid #1282A2; font-size: 16px;" class="ms-auto form-control form-control-lg form-control-sm text-dark" type="text" placeholder="keyword...">                            
+                        </div>
+                        
+                        
+                        <!-- create a note -->
+                        <div class="mb-4 d-grid">
+                            <button ng-click="show_view_note_block = false; show_create_note_block = true;" class="btn text-white" style="background-color: #36bcba;"><i class="bi bi-plus-circle-dotted"></i> Create New</button>
+                        </div>
+                        
+                        
+                        
+                        <h3 class="fw-bold mb-2 mt-5">Notes</h3>
+                        
+                        <div class="mb-2" style="max-height: 100vh; overflow-y: scroll;">
+                            
+                            <!-- note card -->
+                            <a href="javascript:void(0)" ng-repeat="note in notes_list" class="link link-light text-decoration-none">
+                                <div class="rounded-2 p-3 mb-3 " ng-click="view_note(note.ID)" style="border: 1px solid #36bcba; ">
+                                    
+                                    <!-- header -->
+                                    <div class="d-flex">
+                                        <!-- note title -->
+                                        <div class="me-auto">
+                                            <h2 class="fw-bold text-white">
+                                                {{note.title}}
+                                            </h2>
+                                        </div>
+                                        
+                                        <!-- priority / normal indicator -->
+                                        <div class="ms-auto">
+                                            <!-- <a href="javascript:void(0)" class="link link-warning fs-3 d-none">
+                                                <i class="bi bi-star"></i>
+                                            </a> -->
+                                            <p ng-class="{'text-warning': note.starred === 'true', 'text-secondary': note.starred !== 'true'}" class="fs-3 m-0">
+                                                <!-- <i class="bi bi-star"></i> -->
+                                                <!-- <i ng-class="{'bi-star-fill': note.starred == 'true', 'bi-star': note.starred == 'false'}" class="bi "></i> -->
+                                                <i class="bi" ng-class="{'bi-star-fill': note.starred === 'true', 'bi-star': note.starred !== 'true'}"></i>
+                                            </p>
+                                        </div>                            
+                                    </div>
+                                    <small class="mb-3">{{note.date_created | date:'MMM dd, yyyy' }}</small>
+                                    
+                                    
+                                    <p class="fw-bold mt-5 fs-5">Subject</p>
+                                    <small class="text-secondary" >                                        
+                                        {{ note.fetch_note_subj }}
+                                    </small>                            
+                                    
+                                </div>
+                            </a>
+                            
+                            
+                            
+                        </div>
+                        
+                    </div>
+                    
+                </div>
+            </div>
+            
+            
+            
+            <div class="col-lg-7 col-xl-8 col-xxl-9 d-none d-lg-block p-1" >
+                <div class="rounded-2 p-2" style="min-height: 100vh; background-color: #26282a;">
+                                        
+                    <!-- BLOCK - creating note -->
+                    <div id="create-note" ng-show="show_create_note_block">
+                        <!-- header for content -->
+                        <div class="mb-3 d-flex p-1 rounded-2" >                
+                            <div class="me-auto">
+                                <a href="javascript:void(0)" class="link link-light fs-5 text-decoration-none"><i class="bi bi-arrow-clockwise"></i> Reset</a>
+                            </div>
+                            
+                            <div class="ms-auto me-2 d-inline">
+                                <p class="text-white">Last logged: Feb 31, 2025</p>
+                            </div>                                
+                        </div>
+                        
+
+                        <h3 class="fw-bold" style="color: #36bcba;">Create a Note</h3>
+
+                        <!-- note title -->                        
+                        <div class="mt-2">
+                            <input ng-model="createnote_title" type="text" class="form-control-plaintext text-white display-4 fw-bold" placeholder="Note title...">
+                        </div>
+                        
+
+                        <!-- subject -->
+                        <div class="mt-2 mb-3">
+                            <input maxlength="100" ng-model="createnote_subject" style="width: auto; display: inline-block;" id="createnote_subj" type="text" class="form-control form-control-sm text-white bg-dark border border-warning" placeholder="subject">
+                        </div>
+                        
+                        <p class="text-warning m-0">
+                            Today <i class="bi bi-dash-lg"></i> <span class="text-white fw-bold">{{ currentDate | date:'MMM dd, yyyy' }}</span>
+                        </p>
+                        
+                        
+                        <!-- error message -->
+                         <p class="text-danger mt-5">{{createnote_err_message}}</p>
+
+                        <!-- note star -->
+                        <div class="d-flex align-items-center justify-content-end">
+                            <button data-bs-toggle="tooltip" title="Star this note" data-bs-placement="top" ng-click="updatenote_starred()" ng-click="star_note()" class="btn  btn-link link-warning fs-3"><i ng-class="{'bi-star-fill' : createnote_starred, 'bi-star' : !createnote_starred}" class="bi"></i></button>                            
+                        </div>
+                        
+                        
+                        
+                        <!-- quill text editor -->
+                        <div class="rounded-2 mt-2" >                        
+                            <div class="text-white bg-dark" id="editor-create-note" style="height: 50%;"></div>                        
+                        </div>
+                        
+                        
+                        <!-- save button -->
+                        <div class="mt-4 text-end">
+                            <button ng-click="create_new_note()" style="color: #36bcba;" class="btn btn-link text-decoration-none">Create <i class="bi bi-arrow-right"></i></button>
+                            <!-- ng-click="create_new_note()" -->
+                        </div>
+                        
+                    </div>
+                    
+                    
+                    
+                    
+                    
+                    
+                    <!-- BLOCK - viewng and updating note -->
+                    <div id="view-note" ng-show="show_view_note_block">
+                        
+                        <!-- header for content -->
+                        <div class="mb-3 d-flex p-1 rounded-2" >                
+                            <div class="me-auto">
+                                <a href="javascript:void(0)" class="link link-light fs-5 text-decoration-none"><i class="bi bi-arrow-clockwise"></i> Reset</a>
+                            </div>
+                            
+                            <div class="ms-auto me-2 d-inline">
+                                <p class="text-white">Last logged: Feb 31, 2025</p>
+                            </div>                                
+                        </div>
+                        
+                        <!-- note title -->
+                        <h1 class="fw-bold text-white" ng-hide="show_title_edit">
+                            {{update_title}}
+                            <span style="font-size: 16px;"><button ng-click="show_title_edit = true;" class="btn btn-link link-light"><i class="bi bi-pencil-square"></i></button></span>
+                        </h1>
+
+
+                        <!-- note title hidden input -->
+                        <div class="mt-2" ng-show="show_title_edit">
+                            <input ng-model="update_title" type="text" class="form-control-plaintext text-white display-4 fw-bold" placeholder="Note title...">
+                        </div>
+
+
+                        <!-- subject -->
+                        <div class="mt-2 mb-3">
+                            <input maxlength="100" ng-model="update_subject" style="width: auto; display: inline-block;" id="createnote_subj" type="text" class="form-control form-control-sm text-white bg-dark border border-warning" placeholder="subject">
+                        </div>
+
+                        
+                        
+                        <p class="text-secondary m-0">Created on <span class="text-white">{{update_date_created | date:'MMM dd, yyyy'}}</span></p>
+                        <p class="text-secondary m-0">Modified on <span class="text-white">{{update_last_mod | date:'MMM dd, yyyy HH:mm a'}}</span></p>
+                        
+                        
+                        
+                        
+                        <!-- tools -->
+                        <div class="mt-4 d-flex align-items-center justify-content-end">
+                            <button data-bs-toggle="tooltip" title="Star this note" data-bs-placement="top" ng-click="updatenote_starred()" class="btn  btn-link link-warning"><i ng-class="{'bi-star-fill': update_starred === 'true', 'bi-star': update_starred !== 'true'}" class="bi "></i></button>
+                            <button data-bs-toggle="tooltip" title="Archive this note" data-bs-placement="top" class="btn  btn-link link-info"><i class="bi bi-archive-fill"></i></button>
+                            <!-- <button class="btn  btn-link link-success text-decoration-none">Edit <i class="bi bi-pencil-square"></i></button> -->
+                        </div>
+                        
+                        
+                        
+                        <!-- quill text editor -->
+                        <div class=" rounded-2" >                        
+                            <div class="text-white" id="editor-view-note" style="height: 50%;"></div>                        
+                        </div>
+                        
+                        
+                        <!-- save button -->
+                        <div class="mt-4 text-end">
+                            <button ng-click="update_note()" class="btn btn-link link-info text-decoration-none">Save <i class="bi bi-arrow-right"></i></button>
+                        </div>
+                        
+                    </div>
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    <!-- footer -->
+                    
+                    <footer style="background-color: black;" class="p-4 container-fluid mt-auto d-none">
+                        
+                        
+                        <div class="row justify-content-between">
+                            
+                            <!-- copy rights reserved -->
+                            <div class="col-lg-4">                
+                                <p><small class="text-secondary d-none d-lg-block">© 2024. All Rights Reserved. </small></p>
+                                <p class="d-lg-none text-center"><small class="text-secondary">© 2024. All Rights Reserved. </small></p>
+                            </div>
+                            
+                            
+                            <!-- link buttons -->
+                            <div class="col-lg-4 text-center">
+                                <a data-bs-toggle="tooltip" href="https://www.facebook.com/j3ssbugz" class="link-info text-decoration-none me-2" aria-label="Check me on Facebook!" data-bs-original-title="Check me on Facebook!"><i class="bi bi-facebook"></i></a>
+                                <a data-bs-toggle="tooltip" href="/" class="link-info text-decoration-none me-2" aria-label="Checkout my landing page!" data-bs-original-title="Checkout my landing page!"><i class="bi bi-globe"></i></a>
+                                <a data-bs-toggle="tooltip" href="mailto:hotel121909@gmail.com" class="link-info text-decoration-none me-2" aria-label="Reach me Out!" data-bs-original-title="Reach me Out!"><i class="bi bi-envelope-at-fill"></i></a>
+                            </div>
+                            
+                            <!-- some text -->
+                            <div class="col-lg-4">
+                                <p class="text-end d-none d-lg-block"><small class="text-secondary">Uncle Jess ™</small></p>
+                                <p class="d-lg-none text-center"><small class="text-secondary">Uncle Jess ™</small></p>
+                            </div>
+                            
+                            
+                        </div>
+                        
+                        
+                        
+                        
+                    </footer>
+                    
+                    <!--  -->
+                </div>
+            </div>
+            
+            
+        </div>
+        
+        
+        
+        
+        
+    </div>
+    
+    
+    <script src="js/angular.js"></script> 
+    <script src="js/jquery.js"></script> 
+
+
+    <script>
+        var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+        var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+          return new bootstrap.Tooltip(tooltipTriggerEl)
+        })
+        </script>
+
+</body>
+
+
+</html>

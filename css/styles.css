@@ -1,0 +1,44 @@
+.sidebar {
+    height: 100%;
+    width: 250px;
+    position: fixed;
+    overflow-y: scroll;
+    top: 0;
+    left: 0;
+    background-color: #191b1d;
+    color: white;    
+}
+
+
+
+.sidebar a {
+    padding: 10px;
+    text-decoration: none;
+    display: block;
+    color: #b2b6bf;
+}
+
+
+.content {
+    height: 100%;
+    margin-left: 250px;
+    background-color: #111315;
+    color: white;
+    overflow-y: auto;
+    overflow-x: auto;
+}
+
+
+.lobster-regular {
+    font-family: "Lobster", sans-serif;
+    font-weight: 400;
+    font-style: normal;
+  }
+
+  .ql-toolbar button svg {
+    stroke: white !important; /* Icon color */
+}
+
+#createnote_subj::placeholder{
+    color: grey;
+}
