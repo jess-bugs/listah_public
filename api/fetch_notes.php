@@ -10,9 +10,6 @@
 include $_SERVER['DOCUMENT_ROOT'] . '/php_config/functions.php';
 
 
-// remove after debug
-error_reporting(E_ALL);
-ini_set('display_errors', 1);
 
 
 
@@ -20,6 +17,6 @@ if($_SERVER['REQUEST_METHOD'] === 'POST') {
     
 
 
-    echo php_db_fetch('listah', 'notes', true);
+    echo php_db_fetch('listah', 'notes', true, "status = 'active'");
         
 }

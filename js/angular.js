@@ -18,10 +18,10 @@ app.controller('angular_controller', function($scope, $http, $timeout, $sce) {
     
     $scope.createnote_starred = false;
     $scope.createnote_err_message = "";
-    $scope.show_create_note_block = true;
-    $scope.show_view_note_block = false;
+    $scope.show_create_note_block = false;
+    $scope.show_view_note_block = true;
     $scope.current_note_id;
-
+    
     $scope.show_title_edit = false;
     
     $scope.currentDate = new Date();
@@ -58,7 +58,7 @@ app.controller('angular_controller', function($scope, $http, $timeout, $sce) {
         },
         theme: 'snow'
     });
-
+    
     
     
     
@@ -70,7 +70,7 @@ app.controller('angular_controller', function($scope, $http, $timeout, $sce) {
         theme: 'snow'
     });
     
-
+    
     // set to large font
     quill.format('size', 'large');
     quill_update.format('size', 'large');
@@ -172,7 +172,7 @@ app.controller('angular_controller', function($scope, $http, $timeout, $sce) {
     
     
     // function to list notes in card
-    $scope.fetch_notes = function() {
+    $scope.fetch_notes = function(status) {
         
         $http({
             method: 'POST',
@@ -305,8 +305,8 @@ app.controller('angular_controller', function($scope, $http, $timeout, $sce) {
             // });
             
             
-
-                    
+            
+            
             
             
             // clear error message
@@ -324,11 +324,11 @@ app.controller('angular_controller', function($scope, $http, $timeout, $sce) {
                 confirmButtonText: 'OK'
             });
             
-
+            
             $scope.view_note($scope.current_note_id);
-
-
-
+            
+            
+            
             
         }, function (error) {
             
@@ -340,19 +340,80 @@ app.controller('angular_controller', function($scope, $http, $timeout, $sce) {
     }
     
     
-
+    
     $scope.updatenote_starred = function() {
-
+        
         $scope.update_starred =  $scope.update_starred == 'true' ? "false" : "true";
     }
+    
+    
+    
+    
 
+    $scope.archive_err_message = "";
+    
+    $scope.archive_note = function() {
+        
+        Swal.fire({
+            title: 'Move to Archive',
+            html: "Do you want to archive this note?",
+            icon: 'warning',
+            confirmButtonColor: "#36bcba",
+            cancelButtonColor: "red",
+            showCancelButton: true,
+            confirmButtonText: 'Confirm',
+            cancelButtonText: 'Cancel'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                
+                $http({
+                    method: 'POST',
+                    url: "api/archive_note.php",
+                    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                    data: $.param({ 
+                        note_id : $scope.current_note_id,                        
+                        
+                    })
+                    
+                }).then(function (response) {
+                   
+
+                    if(response.data > 0) {
+
+                        Swal.fire({
+                            title: 'Success!',
+                            html: "Moved to archive!",
+                            icon: 'success',
+                            confirmButtonText: 'OK'
+                        });
+
+
+                        $scope.fetch_notes();
+                        
+                    } else {
+
+
+                        $scope.archive_err_message = "There was a problem archiving this note.";
+                    }
+                    
+                    
+        
+                });
+                
+            }
+            
+        });
+        
+    }
+    
+    
     
     // $scope.html_content = "<p class='text-warning'>Hello World!</p>";
     // $scope.text_content = $scope.html_content.replace(/<\/?[^>]+(>|$)/g, "");
     // quill.clipboard.dangerouslyPasteHTML($scope.html_content);
     // quill.root.innerHTML = $scope.html_content;
     
-   
+    
     
     
     

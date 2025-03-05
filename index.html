@@ -54,20 +54,21 @@
         
         <!-- normal / priority -->
         <div class="mt-4 d-flex align-items-center justify-content-between rounded p-2" style="background-color: #111315;">
-            <div class="d-grid">
-                <button style="background-color: #272a30; color: #36bcba;" class="btn btn-sm rounded-3 border border-secondary ">All</button>
+            <div class="d-grid">                
+                <button style="color: #36bcba;" class="btn btn-link text-decoration-none">All</button>
             </div>
             
-            <div class="ms-auto d-grid">
-                <!-- <button class="btn btn-sm btn-dark border border-secondary">Priority</button> -->
-                <a href="javascript:void(0)" class="link link-secondary">Starred</a>
+            <div class="ms-auto d-grid">                
+                <button class="btn btn-link text-decoration-none link-secondary">Archived</button>
+            </div>
+
+            <div class="mt-auto d-grid">
+                <button class="btn btn-link link-secondary text-decoration-none">Starred</button>
             </div>
         </div>
         
 
-        <div class="mt-auto d-grid">
-            <button class="btn btn-sm btn-dark"><i class="bi bi-box-arrow-right"></i> Log Out</button>
-        </div>
+        
     </div>    
     
     
@@ -261,7 +262,7 @@
                         <!-- tools -->
                         <div class="mt-4 d-flex align-items-center justify-content-end">
                             <button data-bs-toggle="tooltip" title="Star this note" data-bs-placement="top" ng-click="updatenote_starred()" class="btn  btn-link link-warning"><i ng-class="{'bi-star-fill': update_starred === 'true', 'bi-star': update_starred !== 'true'}" class="bi "></i></button>
-                            <button data-bs-toggle="tooltip" title="Archive this note" data-bs-placement="top" class="btn  btn-link link-info"><i class="bi bi-archive-fill"></i></button>
+                            <button ng-click="archive_note()" data-bs-toggle="tooltip" title="Archive this note" data-bs-placement="top" class="btn  btn-link link-info"><i class="bi bi-archive-fill"></i></button>
                             <!-- <button class="btn  btn-link link-success text-decoration-none">Edit <i class="bi bi-pencil-square"></i></button> -->
                         </div>
                         
