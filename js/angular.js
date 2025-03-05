@@ -18,13 +18,14 @@ app.controller('angular_controller', function($scope, $http, $timeout, $sce) {
     
     $scope.createnote_starred = false;
     $scope.createnote_err_message = "";
-    $scope.show_create_note_block = false;
-    $scope.show_view_note_block = true;
+    $scope.show_create_note_block = true;
+    $scope.show_view_note_block = false;
     $scope.current_note_id;
     
     $scope.show_title_edit = false;
     
     $scope.currentDate = new Date();
+    $scope.default_note_stat = 'active';
     
     
     // tools for quill JS
@@ -130,7 +131,7 @@ app.controller('angular_controller', function($scope, $http, $timeout, $sce) {
                     
                     
                     // re-fetch notes list
-                    $scope.fetch_notes();
+                    $scope.fetch_notes($scope.default_note_stat);
                     
                     Swal.fire({
                         title: 'Success!',
@@ -179,7 +180,7 @@ app.controller('angular_controller', function($scope, $http, $timeout, $sce) {
             url: "api/fetch_notes.php",
             headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
             data: $.param({ 
-                
+                note_stat : status
             })
             
         }).then(function (response) {
@@ -200,7 +201,7 @@ app.controller('angular_controller', function($scope, $http, $timeout, $sce) {
         
     }
     
-    $scope.fetch_notes();
+    $scope.fetch_notes($scope.default_note_stat);
     
     
     
@@ -315,7 +316,7 @@ app.controller('angular_controller', function($scope, $http, $timeout, $sce) {
             
             
             // re-fetch notes list
-            $scope.fetch_notes();
+            $scope.fetch_notes($scope.default_note_stat);
             
             Swal.fire({
                 title: 'Success!',
@@ -388,7 +389,7 @@ app.controller('angular_controller', function($scope, $http, $timeout, $sce) {
                         });
 
 
-                        $scope.fetch_notes();
+                        $scope.fetch_notes($scope.default_note_stat);
                         
                     } else {
 
@@ -406,6 +407,70 @@ app.controller('angular_controller', function($scope, $http, $timeout, $sce) {
         
     }
     
+
+
+
+
+
+
+
+
+
+
+    $scope.note_fetcher = function(status) {
+
+        $scope.fetch_notes(status);
+        $scope.default_note_stat = status;
+
+    }
+
+
+    $scope.fetch_all_starred = function() {
+        
+        
+
+        $http({
+            method: 'POST',
+            url: "api/starred_notes.php",
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            data: $.param({ 
+                note_id : $scope.current_note_id,                        
+                
+            })
+            
+        }).then(function (response) {
+           
+            Swal.fire({
+                title: 'Server Response',
+                html: response.data,
+                icon: 'info',
+                confirmButtonText: 'OK'
+            });
+
+
+            // if(response.data > 0) {
+
+            //     Swal.fire({
+            //         title: 'Success!',
+            //         html: "Moved to archive!",
+            //         icon: 'success',
+            //         confirmButtonText: 'OK'
+            //     });
+
+
+            //     $scope.fetch_notes($scope.default_note_stat);
+                
+            // } else {
+
+
+            //     $scope.archive_err_message = "There was a problem archiving this note.";
+            // }
+            
+            
+
+        });
+
+    }
     
     
     // $scope.html_content = "<p class='text-warning'>Hello World!</p>";

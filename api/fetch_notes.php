@@ -16,7 +16,21 @@ include $_SERVER['DOCUMENT_ROOT'] . '/php_config/functions.php';
 if($_SERVER['REQUEST_METHOD'] === 'POST') {
     
 
+    if(isset($_POST['note_stat'])) {
 
-    echo php_db_fetch('listah', 'notes', true, "status = 'active'");
+        $note_stat = php_sanitize_input($_POST['note_stat']);
+        
+
+        echo php_db_fetch('listah', 'notes', true, "status = '$note_stat'");
+
+    } else {
+
+        echo "Required data not set";
+    }
+
+    
+
+
+    
         
 }

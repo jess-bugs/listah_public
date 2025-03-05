@@ -53,17 +53,17 @@
         
         
         <!-- normal / priority -->
-        <div class="mt-4 d-flex align-items-center justify-content-between rounded p-2" style="background-color: #111315;">
-            <div class="d-grid">                
-                <button style="color: #36bcba;" class="btn btn-link text-decoration-none">All</button>
+        <div class="mt-4 d-flex flex-column  justify-content-between rounded p-2" style="background-color: #111315;">
+            <div class="">                
+                <button ng-class="{'active_btn': default_note_stat === 'active', 'link-secondary': default_note_stat !== 'active'}" ng-click="note_fetcher('active')" class="btn btn-link text-decoration-none">Active</button>
             </div>
             
-            <div class="ms-auto d-grid">                
-                <button class="btn btn-link text-decoration-none link-secondary">Archived</button>
+            <div class="">                
+                <button ng-class="{'active_btn': default_note_stat === 'archived', 'link-secondary': default_note_stat !== 'archived'}" ng-click="note_fetcher('archived')" class="btn btn-link text-decoration-none link-secondary">Archived</button>
             </div>
 
-            <div class="mt-auto d-grid">
-                <button class="btn btn-link link-secondary text-decoration-none">Starred</button>
+            <div class="">
+                <button ng-click="fetch_all_starred()" class="btn btn-link link-secondary text-decoration-none">Starred</button>
             </div>
         </div>
         
@@ -110,7 +110,7 @@
                             
                             <!-- note card -->
                             <a href="javascript:void(0)" ng-repeat="note in notes_list" class="link link-light text-decoration-none">
-                                <div class="rounded-2 p-3 mb-3 " ng-click="view_note(note.ID)" style="border: 1px solid #36bcba; ">
+                                <div class="rounded-2 p-3 mb-3 " ng-click="view_note(note.ID)" ng-style="{'border': default_note_stat === 'active' ? '1px solid #36bcba' : '1px solid grey'}">
                                     
                                     <!-- header -->
                                     <div class="d-flex">

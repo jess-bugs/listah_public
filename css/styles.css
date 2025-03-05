@@ -42,3 +42,9 @@
 #createnote_subj::placeholder{
     color: grey;
 }
+
+
+
+.active_btn {
+    color: #36bcba;
+}
