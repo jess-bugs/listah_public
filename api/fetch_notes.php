@@ -19,9 +19,20 @@ if($_SERVER['REQUEST_METHOD'] === 'POST') {
     if(isset($_POST['note_stat'])) {
 
         $note_stat = php_sanitize_input($_POST['note_stat']);
+        $note_starred = php_sanitize_input($_POST['note_starred']);
+
+
+        if($note_starred == null) {
+
+            echo php_db_fetch('listah', 'notes', true, "status = '$note_stat'");
+
+        } else {
+
+            echo php_db_fetch('listah', 'notes', true, "status = '$note_stat' and starred ='$note_starred'");
+        }
         
 
-        echo php_db_fetch('listah', 'notes', true, "status = '$note_stat'");
+        // echo php_db_fetch('listah', 'notes', true, "status = '$note_stat'");
 
     } else {
 

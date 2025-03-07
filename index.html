@@ -55,15 +55,18 @@
         <!-- normal / priority -->
         <div class="mt-4 d-flex flex-column  justify-content-between rounded p-2" style="background-color: #111315;">
             <div class="">                
-                <button ng-class="{'active_btn': default_note_stat === 'active', 'link-secondary': default_note_stat !== 'active'}" ng-click="note_fetcher('active')" class="btn btn-link text-decoration-none">Active</button>
+                <button ng-class="{'active_btn': active_btn, 'link-secondary': !active_btn}" ng-click="active_btn = true; archive_btn = false; starred_btn = false; note_fetcher('active')" class="btn btn-link text-decoration-none">Active</button>
+                <!-- ng-class="{'active_btn': default_note_stat === 'active', 'link-secondary': default_note_stat !== 'active'}" -->
             </div>
             
             <div class="">                
-                <button ng-class="{'active_btn': default_note_stat === 'archived', 'link-secondary': default_note_stat !== 'archived'}" ng-click="note_fetcher('archived')" class="btn btn-link text-decoration-none link-secondary">Archived</button>
+                <button ng-class="{'active_btn': archive_btn, 'link-secondary': !archive_btn}" ng-click="active_btn = false; archive_btn = true; starred_btn = false; note_fetcher('archived')" class="btn btn-link text-decoration-none link-secondary">Archived</button>
+                <!-- ng-class="{'active_btn': default_note_stat === 'archived', 'link-secondary': default_note_stat !== 'archived'}" -->
             </div>
 
             <div class="">
-                <button ng-click="fetch_all_starred()" class="btn btn-link link-secondary text-decoration-none">Starred</button>
+                <button ng-class="{'active_btn': starred_btn, 'link-secondary': !starred_btn}" ng-click="active_btn = false; archive_btn = false; starred_btn = true; fetch_all_starred()" class="btn btn-link link-secondary text-decoration-none">Starred</button>
+
             </div>
         </div>
         
@@ -191,7 +194,11 @@
                         
                         
                         <!-- error message -->
-                         <p class="text-danger mt-5">{{createnote_err_message}}</p>
+                        <p class="text-danger mt-5">{{createnote_err_message}}</p>
+                        <div class="my-3" ng-repeat="error in error_messages">
+                            <p class="text-danger">Error: {{error}}</p>
+                        </div>
+
 
                         <!-- note star -->
                         <div class="d-flex align-items-center justify-content-end">
@@ -233,6 +240,11 @@
                             </div>                                
                         </div>
                         
+
+                        <div class="my-3" ng-repeat="error in error_messages">
+                            <p class="text-danger">Error: {{error}}</p>
+                        </div>
+
                         <!-- note title -->
                         <h1 class="fw-bold text-white" ng-hide="show_title_edit">
                             {{update_title}}
