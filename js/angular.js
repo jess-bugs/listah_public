@@ -77,6 +77,20 @@ app.controller('angular_controller', function($scope, $http, $timeout, $sce) {
         },
         theme: 'snow'
     });
+
+
+
+
+    const quill_update_mobile = new Quill('#editor-view-note-mobile', {
+        
+        modules: {
+            
+        },
+        theme: 'snow'
+    });
+
+
+
     
     
     // set to large font
@@ -253,6 +267,7 @@ app.controller('angular_controller', function($scope, $http, $timeout, $sce) {
             $scope.update_title = response.data.title;
             $scope.update_subject = response.data.subject;
             $scope.update_starred = response.data.starred;
+            $scope.update_archived = response.data.status;
             $scope.update_date_created = new Date(response.data.date_created);
             $scope.update_last_mod = new Date(response.data.last_modified);
             $scope.update_content = response.data.content;
@@ -262,6 +277,8 @@ app.controller('angular_controller', function($scope, $http, $timeout, $sce) {
             $scope.text_content = $scope.html_content.replace(/<\/?[^>]+(>|$)/g, "");
             // quill_update.clipboard.dangerouslyPasteHTML($scope.text_content);
             quill_update.root.innerHTML = $scope.html_content;
+            quill_update_mobile.root.innerHTML = $scope.html_content;
+
             
             
             // quill_update.root.innerHTML = $scope.update_content
@@ -404,6 +421,72 @@ app.controller('angular_controller', function($scope, $http, $timeout, $sce) {
         
     }
     
+
+
+
+
+
+
+
+
+    // function to unarchive the note
+    $scope.unarchive_note = function() {
+
+        Swal.fire({
+            title: 'Move to Archive',
+            html: "Do you want to remove this from the archives?",
+            icon: 'warning',
+            confirmButtonColor: "#36bcba",
+            cancelButtonColor: "red",
+            showCancelButton: true,
+            confirmButtonText: 'Confirm',
+            cancelButtonText: 'Cancel'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                
+                $http({
+                    method: 'POST',
+                    url: "api/unarchive_note.php",
+                    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                    data: $.param({ 
+                        note_id : $scope.current_note_id,                                                
+                    })
+                    
+                }).then(function (response) {
+                                       
+
+                    if(response.data > 0) {
+
+                        Swal.fire({
+                            title: 'Success!',
+                            html: "Moved to archive!",
+                            icon: 'success',
+                            confirmButtonText: 'OK'
+                        });
+
+
+                        $scope.fetch_notes($scope.default_note_stat);
+                        
+                    } else {
+
+
+                        $scope.archive_err_message = "Server Response: " + response.data;
+                    }
+                    
+                    
+        
+                } , function (error) {
+            
+                    $scope.error_messages.push('An error occured while unarchiving this note.');
+                    
+                });;
+                
+            }
+            
+        });        
+
+        
+    }
 
 
 

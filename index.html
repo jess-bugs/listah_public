@@ -46,31 +46,61 @@
 <body ng-app="angularApp" ng-controller="angular_controller">
     
     
+    <div class="d-lg-none">
+        <nav class="navbar navbar-expand-lg bg-body-tertiary">
+            <div class="container-fluid">
+                <a class="navbar-brand" href="#">
+                    <p class="fw-bold lobster-regular fs-1">Listah!</p>
+                </a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                        <li class="nav-item">
+                            <button ng-class="{'active_btn': active_btn, 'link-secondary': !active_btn}" ng-click="active_btn = true; archive_btn = false; starred_btn = false; note_fetcher('active')" class="btn btn-link text-decoration-none"><i class="bi bi-circle text-success" ></i> Active</button>
+                        </li>
+                        
+                        <li class="nav-item">
+                            <button ng-class="{'active_btn': archive_btn, 'link-secondary': !archive_btn}" ng-click="active_btn = false; archive_btn = true; starred_btn = false; note_fetcher('archived')" class="btn btn-link text-decoration-none link-secondary"><i class="bi bi-archive-fill"></i> Archived</button>
+                        </li>
+                        
+                        <li class="nav-item">
+                            <button ng-class="{'active_btn': starred_btn, 'link-secondary': !starred_btn}" ng-click="active_btn = false; archive_btn = false; starred_btn = true; fetch_all_starred()" class="btn btn-link link-secondary text-decoration-none"><i class="bi bi-star-fill text-warning"></i> Starred</button>
+                        </li>                        
+                    </ul>                    
+                </div>
+            </div>
+        </nav>
+    </div>
+    
     
     <!-- the sidebar -->
-    <div class="sidebar p-3 d-flex flex-column">
+    
+    <div class="sidebar p-3 d-none d-lg-flex flex-column">
         <h1 class="fw-bold lobster-regular display-3">Listah!</h1>
         
         
         <!-- normal / priority -->
         <div class="mt-4 d-flex flex-column  justify-content-between rounded p-2" style="background-color: #111315;">
             <div class="">                
-                <button ng-class="{'active_btn': active_btn, 'link-secondary': !active_btn}" ng-click="active_btn = true; archive_btn = false; starred_btn = false; note_fetcher('active')" class="btn btn-link text-decoration-none">Active</button>
+                <button ng-class="{'active_btn': active_btn, 'link-secondary': !active_btn}" ng-click="active_btn = true; archive_btn = false; starred_btn = false; note_fetcher('active')" class="btn btn-link text-decoration-none"><i class="bi bi-circle text-success" ></i> Active</button>
                 <!-- ng-class="{'active_btn': default_note_stat === 'active', 'link-secondary': default_note_stat !== 'active'}" -->
             </div>
             
             <div class="">                
-                <button ng-class="{'active_btn': archive_btn, 'link-secondary': !archive_btn}" ng-click="active_btn = false; archive_btn = true; starred_btn = false; note_fetcher('archived')" class="btn btn-link text-decoration-none link-secondary">Archived</button>
+                <button ng-class="{'active_btn': archive_btn, 'link-secondary': !archive_btn}" ng-click="active_btn = false; archive_btn = true; starred_btn = false; note_fetcher('archived')" class="btn btn-link text-decoration-none link-secondary"><i class="bi bi-archive-fill"></i> Archived</button>
                 <!-- ng-class="{'active_btn': default_note_stat === 'archived', 'link-secondary': default_note_stat !== 'archived'}" -->
             </div>
-
+            
             <div class="">
-                <button ng-class="{'active_btn': starred_btn, 'link-secondary': !starred_btn}" ng-click="active_btn = false; archive_btn = false; starred_btn = true; fetch_all_starred()" class="btn btn-link link-secondary text-decoration-none">Starred</button>
-
+                <button ng-class="{'active_btn': starred_btn, 'link-secondary': !starred_btn}" ng-click="active_btn = false; archive_btn = false; starred_btn = true; fetch_all_starred()" class="btn btn-link link-secondary text-decoration-none"><i class="bi bi-star-fill text-warning"></i> Starred</button>
+                
             </div>
         </div>
         
-
+        
         
     </div>    
     
@@ -111,8 +141,50 @@
                         
                         <div class="mb-2" style="max-height: 100vh; overflow-y: scroll;">
                             
+
+                            
+
                             <!-- note card -->
-                            <a href="javascript:void(0)" ng-repeat="note in notes_list" class="link link-light text-decoration-none">
+                            <a href="javascript:void(0)"  ng-repeat="note in notes_list" class="link link-light text-decoration-none d-none d-lg-block">
+                                <div class="rounded-2 p-3 mb-3 " ng-click="view_note(note.ID)" ng-style="{'border': default_note_stat === 'active' ? '1px solid #36bcba' : '1px solid grey'}">
+                                    
+                                    <!-- header -->
+                                    <div class="d-flex">
+                                        <!-- note title -->
+                                        <div class="me-auto">
+                                            <h2 class="fw-bold text-white">
+                                                {{note.title}}
+                                            </h2>
+                                        </div>
+                                        
+                                        <!-- priority / normal indicator -->
+                                        <div class="ms-auto">
+                                            <!-- <a href="javascript:void(0)" class="link link-warning fs-3 d-none">
+                                                <i class="bi bi-star"></i>
+                                            </a> -->
+                                            <p ng-class="{'text-warning': note.starred === 'true', 'text-secondary': note.starred !== 'true'}" class="fs-3 m-0">
+                                                <!-- <i class="bi bi-star"></i> -->
+                                                <!-- <i ng-class="{'bi-star-fill': note.starred == 'true', 'bi-star': note.starred == 'false'}" class="bi "></i> -->
+                                                <i class="bi" ng-class="{'bi-star-fill': note.starred === 'true', 'bi-star': note.starred !== 'true'}"></i>
+                                            </p>
+                                        </div>                            
+                                    </div>
+                                    <small class="mb-3">{{note.date_created | date:'MMM dd, yyyy' }}</small>
+                                    
+                                    
+                                    <p class="fw-bold mt-5 fs-5">Subject</p>
+                                    <small class="text-secondary" >                                        
+                                        {{ note.fetch_note_subj }}
+                                    </small>                            
+                                    
+                                </div>
+                            </a>
+
+
+
+
+                            <!-- for mobile -->
+                            <a href="javascript:void(0)" data-bs-toggle="modal" data-bs-target="#exampleModal" ng-repeat="note in notes_list" class="link link-light text-decoration-none d-lg-none">
                                 <div class="rounded-2 p-3 mb-3 " ng-click="view_note(note.ID)" ng-style="{'border': default_note_stat === 'active' ? '1px solid #36bcba' : '1px solid grey'}">
                                     
                                     <!-- header -->
@@ -160,7 +232,7 @@
             
             <div class="col-lg-7 col-xl-8 col-xxl-9 d-none d-lg-block p-1" >
                 <div class="rounded-2 p-2" style="min-height: 100vh; background-color: #26282a;">
-                                        
+                    
                     <!-- BLOCK - creating note -->
                     <div id="create-note" ng-show="show_create_note_block">
                         <!-- header for content -->
@@ -174,15 +246,15 @@
                             </div>                                
                         </div>
                         
-
+                        
                         <h3 class="fw-bold" style="color: #36bcba;">Create a Note</h3>
-
+                        
                         <!-- note title -->                        
                         <div class="mt-2">
                             <input ng-model="createnote_title" type="text" class="form-control-plaintext text-white display-4 fw-bold" placeholder="Note title...">
                         </div>
                         
-
+                        
                         <!-- subject -->
                         <div class="mt-2 mb-3">
                             <input maxlength="100" ng-model="createnote_subject" style="width: auto; display: inline-block;" id="createnote_subj" type="text" class="form-control form-control-sm text-white bg-dark border border-warning" placeholder="subject">
@@ -198,8 +270,8 @@
                         <div class="my-3" ng-repeat="error in error_messages">
                             <p class="text-danger">Error: {{error}}</p>
                         </div>
-
-
+                        
+                        
                         <!-- note star -->
                         <div class="d-flex align-items-center justify-content-end">
                             <button data-bs-toggle="tooltip" title="Star this note" data-bs-placement="top" ng-click="updatenote_starred()" ng-click="star_note()" class="btn  btn-link link-warning fs-3"><i ng-class="{'bi-star-fill' : createnote_starred, 'bi-star' : !createnote_starred}" class="bi"></i></button>                            
@@ -240,29 +312,29 @@
                             </div>                                
                         </div>
                         
-
+                        
                         <div class="my-3" ng-repeat="error in error_messages">
                             <p class="text-danger">Error: {{error}}</p>
                         </div>
-
+                        
                         <!-- note title -->
                         <h1 class="fw-bold text-white" ng-hide="show_title_edit">
                             {{update_title}}
                             <span style="font-size: 16px;"><button ng-click="show_title_edit = true;" class="btn btn-link link-light"><i class="bi bi-pencil-square"></i></button></span>
                         </h1>
-
-
+                        
+                        
                         <!-- note title hidden input -->
                         <div class="mt-2" ng-show="show_title_edit">
                             <input ng-model="update_title" type="text" class="form-control-plaintext text-white display-4 fw-bold" placeholder="Note title...">
                         </div>
-
-
+                        
+                        
                         <!-- subject -->
                         <div class="mt-2 mb-3">
                             <input maxlength="100" ng-model="update_subject" style="width: auto; display: inline-block;" id="createnote_subj" type="text" class="form-control form-control-sm text-white bg-dark border border-warning" placeholder="subject">
                         </div>
-
+                        
                         
                         
                         <p class="text-secondary m-0">Created on <span class="text-white">{{update_date_created | date:'MMM dd, yyyy'}}</span></p>
@@ -274,8 +346,8 @@
                         <!-- tools -->
                         <div class="mt-4 d-flex align-items-center justify-content-end">
                             <button data-bs-toggle="tooltip" title="Star this note" data-bs-placement="top" ng-click="updatenote_starred()" class="btn  btn-link link-warning"><i ng-class="{'bi-star-fill': update_starred === 'true', 'bi-star': update_starred !== 'true'}" class="bi "></i></button>
-                            <button ng-click="archive_note()" data-bs-toggle="tooltip" title="Archive this note" data-bs-placement="top" class="btn  btn-link link-info"><i class="bi bi-archive-fill"></i></button>
-                            <!-- <button class="btn  btn-link link-success text-decoration-none">Edit <i class="bi bi-pencil-square"></i></button> -->
+                            <button ng-hide="update_archived == 'archived'" ng-click="archive_note()" data-bs-toggle="tooltip" title="Archive this note" data-bs-placement="top" class="btn  btn-link link-info"><i class="bi bi-archive-fill"></i></button>
+                            <button ng-click="unarchive_note()" ng-show="update_archived == 'archived'" data-bs-toggle="tooltip" title="Unarchive" data-bs-placement="top" class="btn  btn-link link-success text-decoration-none"><i class="bi bi-archive"></i></button>
                         </div>
                         
                         
@@ -350,30 +422,93 @@
                     </footer>
                     
                     <!--  -->
+                    
+                    
+                    
+                    
+                    
                 </div>
-            </div>
-            
-            
-        </div>
-        
-        
-        
-        
-        
+            </div>                        
+        </div>                
     </div>
+    
+    
+    
+    
+    
+    
+    
+    
+    <!-- Modals -->
+    
+    <div class="modal fade " id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-scrollable">
+            <div class="modal-content ">
+
+                
+                <div class="modal-body">
+
+                    <!-- note title -->
+                    <h1 class="fw-bold" ng-hide="show_title_edit">
+                        {{update_title}}
+                        <span style="font-size: 16px;"><button ng-click="show_title_edit = true;" class="btn btn-link"><i class="bi bi-pencil-square"></i></button></span>
+                    </h1>
+                    
+                    
+                    <!-- note title hidden input -->
+                    <div class="mt-2" ng-show="show_title_edit">
+                        <input ng-model="update_title" type="text" class="form-control-plaintext display-4 fw-bold" placeholder="Note title...">
+                    </div>
+                    
+                    
+                    <!-- subject -->
+                    <div class="mt-2 mb-3">
+                        <input maxlength="100" ng-model="update_subject" style="width: auto; display: inline-block;" id="createnote_subj" type="text" class="form-control form-control-sm bg-dark border border-warning text-white" placeholder="subject">
+                    </div>
+
+                    
+                    <p class="text-secondary m-0">Created on <span class="text-info">{{update_date_created | date:'MMM dd, yyyy'}}</span></p>
+                    <p class="text-secondary m-0">Modified on <span class="text-info">{{update_last_mod | date:'MMM dd, yyyy HH:mm a'}}</span></p>
+                    
+                    
+                    
+                    
+                    <!-- tools -->
+                    <div class="mt-4 d-flex align-items-center justify-content-end">
+                        <button data-bs-toggle="tooltip" title="Star this note" data-bs-placement="top" ng-click="updatenote_starred()" class="btn  btn-link link-warning"><i ng-class="{'bi-star-fill': update_starred === 'true', 'bi-star': update_starred !== 'true'}" class="bi "></i></button>
+                        <button ng-hide="update_archived == 'archived'" ng-click="archive_note()" data-bs-toggle="tooltip" title="Archive this note" data-bs-placement="top" class="btn  btn-link link-info"><i class="bi bi-archive-fill"></i></button>
+                        <button ng-click="unarchive_note()" ng-show="update_archived == 'archived'" data-bs-toggle="tooltip" title="Unarchive" data-bs-placement="top" class="btn  btn-link link-success text-decoration-none"><i class="bi bi-archive"></i></button>
+                    </div>
+                        
+
+
+                    <!-- quill text editor -->
+                    <div class=" rounded-2" >                        
+                        <div id="editor-view-note-mobile" style="height: 100%;"></div>                        
+                    </div>
+                    
+                        
+                    
+                </div>
+
+                
+            </div>
+        </div>
+    </div>
+    
     
     
     <script src="js/angular.js"></script> 
     <script src="js/jquery.js"></script> 
-
-
+    
+    
     <script>
         var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
         var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
-          return new bootstrap.Tooltip(tooltipTriggerEl)
+            return new bootstrap.Tooltip(tooltipTriggerEl)
         })
-        </script>
-
+    </script>
+    
 </body>
 
 
