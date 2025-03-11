@@ -1,5 +1,6 @@
 <?php
-include '../../php_config/functions.php';
+// include '../../php_config/functions.php';
+include '../php_config/functions.php';
 
 
 if($_SERVER['REQUEST_METHOD'] === 'POST') {

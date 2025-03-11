@@ -1,6 +1,7 @@
 <?php
 
-include '../../php_config/functions.php';
+// include '../../php_config/functions.php';
+include '../php_config/functions.php';
 
 
 
