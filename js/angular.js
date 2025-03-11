@@ -514,6 +514,63 @@ app.controller('angular_controller', function($scope, $http, $timeout, $sce) {
         $scope.fetch_notes($scope.default_note_stat, "true");
 
     }
+
+
+
+
+
+    
+
+    // MOBILE FUNCTIONS
+    $scope.update_note_mobile = function() {
+
+        // updated quill content
+        $scope.quill_update_mobile = quill_update_mobile.root.innerHTML;
+        
+        
+        $http({
+            method: 'POST',
+            url: "api/update_note.php",
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            data: $.param({ 
+                note_id : $scope.current_note_id,
+                note_title : $scope.update_title,
+                note_content : $scope.quill_update_mobile, 
+                note_starred : $scope.update_starred,
+                note_subject : $scope.update_subject
+                
+            })
+            
+        }).then(function (response) {
+            
+            
+            
+            
+            // re-fetch notes list
+            $scope.fetch_notes($scope.default_note_stat);
+            
+            Swal.fire({
+                title: 'Success!',
+                html: "Changes saved!",
+                icon: 'success',
+                confirmButtonText: 'OK'
+            });
+            
+            
+            $scope.view_note($scope.current_note_id);
+            
+            
+            
+            
+        }, function (error) {
+            
+            $scope.error_messages.push('An error occured while updating this note.');
+            
+        });
+
+        
+    }
+
     
     
 });
