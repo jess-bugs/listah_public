@@ -177,7 +177,12 @@
                             
                             <!-- DESKTOP - note card -->
                             <a href="javascript:void(0)"  ng-repeat="note in notes_list | filter:search_note" class="link link-light text-decoration-none d-none d-lg-block">
-                                <div class="rounded-2 p-3 mb-3 " ng-click="view_note(note.ID)" ng-style="{'border': default_note_stat === 'active' ? '1px solid #36bcba' : '1px solid grey'}">
+                                <div class="rounded-2 p-3 mb-3 " 
+                                ng-click="selectNote(note.ID); view_note(note.ID)" 
+                                ng-style="{
+                                    'border': default_note_stat === 'active' ? '1px solid #36bcba' : '1px solid grey',
+                                    'background-color': selectedNoteId === note.ID ? 'rgba(54, 188, 186, 0.1)' : 'transparent'
+                                 }">
                                     
                                     <!-- header -->
                                     <div class="d-flex">
@@ -217,8 +222,13 @@
                             <!-- MOBILE - notecard -->
                             <!-- data-bs-toggle="modal" data-bs-target="#update-note-modal" -->
                             <!-- data-bs-toggle="offcanvas" data-bs-target="#offcan-viewnote" -->
-                            <a href="javascript:void(0)" data-bs-toggle="modal" data-bs-target="#update-note-modal" ng-repeat="note in notes_list" class="link link-light text-decoration-none d-lg-none">
-                                <div class="rounded-2 p-3 mb-3 " ng-click="view_note(note.ID)" ng-style="{'border': default_note_stat === 'active' ? '1px solid #36bcba' : '1px solid grey'}">
+                            <a href="javascript:void(0)" data-bs-toggle="modal" data-bs-target="#update-note-modal" ng-repeat="note in notes_list | filter:search_note" class="link link-light text-decoration-none d-lg-none">
+                                <div class="rounded-2 p-3 mb-3 " 
+                                ng-click="selectNote(note.ID); view_note(note.ID)" 
+                                ng-style="{
+                                    'border': default_note_stat === 'active' ? '1px solid #36bcba' : '1px solid grey',
+                                    'background-color': selectedNoteId === note.ID ? 'rgba(54, 188, 186, 0.1)' : 'transparent'
+                                 }">
                                     
                                     <!-- header -->
                                     <div class="d-flex">
@@ -270,9 +280,6 @@
                     <div id="create-note" ng-show="show_create_note_block">
                         <!-- header for content -->
                         <div class="mb-3 d-flex p-1 rounded-2" >                
-                            <div class="me-auto">
-                                <a href="javascript:void(0)" class="link link-light fs-5 text-decoration-none"><i class="bi bi-arrow-clockwise"></i> Reset</a>
-                            </div>
                             
                             <div class="ms-auto me-2 d-inline">
                                 <p class="text-white">Last logged: Feb 31, 2025</p>

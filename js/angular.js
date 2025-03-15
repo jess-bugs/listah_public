@@ -3,8 +3,15 @@ var app = angular.module('angularApp', []);
 app.controller('angular_controller', function($scope, $http, $timeout, $sce) {
     
     
-    
-    
+
+
+    /******* used for background setting for selected card */
+    $scope.selectedNoteId = null;
+
+    $scope.selectNote = function(noteId) {
+        $scope.selectedNoteId = noteId;
+    };
+    /*******************************************************/
     
     
     $scope.error_messages = [];
