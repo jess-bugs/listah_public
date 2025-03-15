@@ -6,12 +6,6 @@ app.controller('angular_controller', function($scope, $http, $timeout, $sce) {
     
     
     
-    /****** 2 ways of setting the content (value) ************/
-    // $scope.html_content = "<p class='text-warning'>Hello World!</p>";
-    // $scope.text_content = $scope.html_content.replace(/<\/?[^>]+(>|$)/g, "");
-    // quill.clipboard.dangerouslyPasteHTML($scope.html_content);
-    // quill.root.innerHTML = $scope.html_content;
-    
     
     $scope.error_messages = [];
     
@@ -81,13 +75,31 @@ app.controller('angular_controller', function($scope, $http, $timeout, $sce) {
 
 
 
+
+
     const quill_update_mobile = new Quill('#editor-view-note-mobile', {
         
         modules: {
-            
+            toolbar: toolbarOptions
         },
         theme: 'snow'
     });
+
+
+    
+
+
+
+
+    const quill_create_mobile = new Quill('#editor-create-note-mobile', {
+        
+        modules: {
+            toolbar: toolbarOptions
+        },
+        theme: 'snow'
+    });
+
+
 
 
 
@@ -116,8 +128,8 @@ app.controller('angular_controller', function($scope, $http, $timeout, $sce) {
             
         } else {
             
-            // alert($scope.createnote_quill_content);
-            console.log("Quil CONTENT: " + $scope.createnote_quill_content);
+            
+            
             $http({
                 method: 'POST',
                 url: "api/create_note.php",
@@ -573,4 +585,93 @@ app.controller('angular_controller', function($scope, $http, $timeout, $sce) {
 
     
     
+
+
+
+
+    $scope.create_new_note_mobile = function() {
+        
+        $scope.createnote_quill_content_mobile = quill_create_mobile.root.innerHTML;
+        
+        let quill_content =  $scope.createnote_quill_content_mobile.replace(/<\/?[^>]+(>|$)/g, "")
+        
+        let note_title = $scope.createnote_title;
+        
+        if(quill_content == "" || note_title == "" || note_title == undefined) {
+            
+            
+            $scope.createnote_err_message = "Fields cannot be empty.";
+            
+        } else {
+            
+
+            
+            
+            $http({
+                method: 'POST',
+                url: "api/create_note.php",
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                data: $.param({ 
+                    note_title : $scope.createnote_title,
+                    note_content : $scope.createnote_quill_content_mobile,
+                    note_starred : $scope.createnote_starred,
+                    note_subject : $scope.createnote_subject
+                })
+                
+            }).then(function(response) {
+                
+                
+                
+                if(response.data > 0) {
+                    
+                    // clear quill JS
+                    quill_create_mobile.clipboard.dangerouslyPasteHTML("");
+                    
+                    // clear the title
+                    $scope.createnote_title = "";
+                    
+                    // remove star
+                    $scope.createnote_starred = false;
+                    
+                    // clear error message
+                    $scope.createnote_err_message = "";
+                    
+                    // clear subject field
+                    $scope.createnote_subject = "";
+                    
+                    
+                    // re-fetch notes list
+                    $scope.fetch_notes($scope.default_note_stat);
+
+
+                    // close mobile modal
+                    $(".btn-close").click();
+                    
+                    Swal.fire({
+                        title: 'Success!',
+                        html: "Note Created!",
+                        icon: 'success',
+                        confirmButtonText: 'OK'
+                    });
+                    
+                    
+                } else {
+                    
+                    
+                    // $scope.createnote_err_message = "Failed to save note: " + response.data;
+                    $scope.error_messages.push('Failed to create this note.');
+                }
+                
+                
+            }, function(error) {
+                
+                // $scope.createnote_err_message = "Backend Error: " + (error.data ? error.data : JSON.stringify(error));
+                $scope.error_messages.push('Failed to create this note: ' + (error.data ? error.data : JSON.stringify(error)));
+            })
+        }
+        
+    }
+
+
+
 });
