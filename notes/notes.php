@@ -173,7 +173,54 @@ if(isset($_GET['logout'])) {
                     <!-- style="max-height: 100vh; overflow-y: scroll;" -->
                     <div class="p-2" >
                         
-                        <div ng-show="note_headers">
+
+
+
+
+
+                        <!-- note heads for desktop -->
+                        <div class="d-none d-lg-block" >
+                        
+                            <!-- search for a note -->
+                            <div class="my-3">
+                                <p class="fw-bold"><i class="bi bi-search"></i> Search for a note</p>
+                                <input ng-model="search_note" style="border: 1px solid #1282A2; font-size: 16px;" class="ms-auto form-control form-control-lg form-control-sm text-dark" type="text" placeholder="keyword...">                            
+                            </div>
+                            
+                            
+                            <!-- create a note -->
+                            <div class="mb-4 d-grid">
+                                <!-- for lg -->
+                                <button ng-click="show_view_note_block = false; show_create_note_block = true;" class="btn text-white d-none d-lg-block" style="background-color: #36bcba;"><i class="bi bi-plus-circle-dotted"></i> Create New</button>
+                                
+                                <!-- for mobile -->
+                                <!-- data-bs-toggle="modal" data-bs-target="#create-note-modal" -->
+                                <button ng-click="show_create_note_mobile()" class="btn text-white d-lg-none" style="background-color: #36bcba;"><i class="bi bi-plus-circle-dotted"></i> Create New</button>
+                            </div>
+                            
+                        
+
+                        
+
+                        
+                            <h3 class="fw-bold mb-2 mt-5">Notes</h3>
+
+
+                            <!-- active, archived, starred buttons for mobile view -->
+                            <div class="my-3 d-lg-none">
+                                <div class="btn-group" role="group">
+                                    <button ng-class="{'active_btn': active_btn, 'link-secondary': !active_btn}" ng-click="active_btn = true; archive_btn = false; starred_btn = false; note_fetcher('active')" class="btn btn-link text-decoration-none"><i class="bi bi-circle text-success" ></i> Active</button>
+                                    <button ng-class="{'active_btn': archive_btn, 'link-secondary': !archive_btn}" ng-click="active_btn = false; archive_btn = true; starred_btn = false; note_fetcher('archived')" class="btn btn-link text-decoration-none link-secondary"><i class="bi bi-archive-fill"></i> Archived</button>
+                                    <button ng-class="{'active_btn': starred_btn, 'link-secondary': !starred_btn}" ng-click="active_btn = false; archive_btn = false; starred_btn = true; fetch_all_starred()" class="btn btn-link link-secondary text-decoration-none"><i class="bi bi-star-fill text-warning"></i> Starred</button>
+                                </div>
+                            </div>
+                        </div>
+
+
+                    
+
+                        <!-- note heads for mobile -->
+                        <div class="d-lg-none" ng-show="note_headers">
                         
                             <!-- search for a note -->
                             <div class="my-3">
@@ -306,7 +353,7 @@ if(isset($_GET['logout'])) {
 
 
                             <!-- view and edit for mobile -->
-                            <div ng-show="edit_note_mobile" class="mt-1">
+                            <div ng-show="edit_note_mobile" class="mt-1 d-lg-none">
                                 
 
                                 
@@ -368,7 +415,7 @@ if(isset($_GET['logout'])) {
 
 
                             <!-- create note for mobile -->
-                            <div ng-show="create_note_mobile" class="mt-1">
+                            <div ng-show="create_note_mobile" class="mt-1 d-lg-none">
                                 
 
                                 <!-- headers -->
