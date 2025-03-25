@@ -10,6 +10,8 @@ app.controller('angular_controller', function($scope, $http, $timeout, $sce) {
     
     $scope.selectNote = function(noteId) {
         $scope.selectedNoteId = noteId;
+        
+        $scope.show_edit_note_mobile();
     };
     /*******************************************************/
     
@@ -683,12 +685,21 @@ app.controller('angular_controller', function($scope, $http, $timeout, $sce) {
                     
                     // close mobile modal
                     $(".btn-close").click();
+
+
+            
+                    
+                    // show headers / hided create note for mobile
+                    $scope.note_headers = true;
+                    $scope.create_note_mobile = false;
+
+
                     
                     Swal.fire({
                         toast: true,
                         position: 'top-end',
                         icon: 'success',
-                        title: 'Changes saved!',
+                        title: 'Note created!',
                         showConfirmButton: false,
                         showCancelButton: false,
                         timer: 2000,
@@ -731,7 +742,7 @@ app.controller('angular_controller', function($scope, $http, $timeout, $sce) {
     
 
 
-    
+
     $scope.logout = function() {
         
         Swal.fire({
@@ -770,5 +781,48 @@ app.controller('angular_controller', function($scope, $http, $timeout, $sce) {
         
         
     }
+
+
+
+
+
+
+
+
+
+    // $scope.view_note_mobile = false;
+    // $scope.create_note_mobile = false;
+
+
+
+    
+    
+    
+    
+    
+    $scope.note_headers = true;
+    $scope.edit_note_mobile = false;
+
+    $scope.show_edit_note_mobile = function() {
+
+        $scope.note_headers = false;
+
+        $scope.edit_note_mobile = true;
+
+    }
+
+
+
+    $scope.create_note_mobile = false;
+
+    $scope.show_create_note_mobile = function() {
+
+        $scope.note_headers = false;
+
+        $scope.create_note_mobile = true;
+
+    }
+
+    
     
 });

@@ -96,7 +96,7 @@ if(isset($_GET['logout'])) {
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                         <li class="nav-item">
-                            <button class="btn btn-link link-danger text-decoration-none"><i class="bi bi-power text-danger" ></i> Logout</button>
+                            <button ng-click="logout()" class="btn btn-link link-danger text-decoration-none"><i class="bi bi-power text-danger" ></i> Logout</button>
                         </li>                
                         
                         
@@ -173,34 +173,42 @@ if(isset($_GET['logout'])) {
                     <!-- style="max-height: 100vh; overflow-y: scroll;" -->
                     <div class="p-2" >
                         
+                        <div ng-show="note_headers">
                         
-                        <!-- search for a note -->
-                        <div class="my-3">
-                            <p class="fw-bold"><i class="bi bi-search"></i> Search for a note</p>
-                            <input ng-model="search_note" style="border: 1px solid #1282A2; font-size: 16px;" class="ms-auto form-control form-control-lg form-control-sm text-dark" type="text" placeholder="keyword...">                            
-                        </div>
+                            <!-- search for a note -->
+                            <div class="my-3">
+                                <p class="fw-bold"><i class="bi bi-search"></i> Search for a note</p>
+                                <input ng-model="search_note" style="border: 1px solid #1282A2; font-size: 16px;" class="ms-auto form-control form-control-lg form-control-sm text-dark" type="text" placeholder="keyword...">                            
+                            </div>
+                            
+                            
+                            <!-- create a note -->
+                            <div class="mb-4 d-grid">
+                                <!-- for lg -->
+                                <button ng-click="show_view_note_block = false; show_create_note_block = true;" class="btn text-white d-none d-lg-block" style="background-color: #36bcba;"><i class="bi bi-plus-circle-dotted"></i> Create New</button>
+                                
+                                <!-- for mobile -->
+                                <!-- data-bs-toggle="modal" data-bs-target="#create-note-modal" -->
+                                <button ng-click="show_create_note_mobile()" class="btn text-white d-lg-none" style="background-color: #36bcba;"><i class="bi bi-plus-circle-dotted"></i> Create New</button>
+                            </div>
+                            
                         
+
                         
-                        <!-- create a note -->
-                        <div class="mb-4 d-grid">
-                            <button ng-click="show_view_note_block = false; show_create_note_block = true;" class="btn text-white d-none d-lg-block" style="background-color: #36bcba;"><i class="bi bi-plus-circle-dotted"></i> Create New</button>
-                            <button data-bs-toggle="modal" data-bs-target="#create-note-modal" class="btn text-white d-lg-none" style="background-color: #36bcba;"><i class="bi bi-plus-circle-dotted"></i> Create New</button>
-                        </div>
+
                         
-                        
-                        
-                        <h3 class="fw-bold mb-2 mt-5">Notes</h3>
+                            <h3 class="fw-bold mb-2 mt-5">Notes</h3>
 
 
-                        <!-- active, archived, starred buttons for mobile view -->
-                        <div class="my-3 d-lg-none">
-                            <div class="btn-group" role="group">
-                                <button ng-class="{'active_btn': active_btn, 'link-secondary': !active_btn}" ng-click="active_btn = true; archive_btn = false; starred_btn = false; note_fetcher('active')" class="btn btn-link text-decoration-none"><i class="bi bi-circle text-success" ></i> Active</button>
-                                <button ng-class="{'active_btn': archive_btn, 'link-secondary': !archive_btn}" ng-click="active_btn = false; archive_btn = true; starred_btn = false; note_fetcher('archived')" class="btn btn-link text-decoration-none link-secondary"><i class="bi bi-archive-fill"></i> Archived</button>
-                                <button ng-class="{'active_btn': starred_btn, 'link-secondary': !starred_btn}" ng-click="active_btn = false; archive_btn = false; starred_btn = true; fetch_all_starred()" class="btn btn-link link-secondary text-decoration-none"><i class="bi bi-star-fill text-warning"></i> Starred</button>
+                            <!-- active, archived, starred buttons for mobile view -->
+                            <div class="my-3 d-lg-none">
+                                <div class="btn-group" role="group">
+                                    <button ng-class="{'active_btn': active_btn, 'link-secondary': !active_btn}" ng-click="active_btn = true; archive_btn = false; starred_btn = false; note_fetcher('active')" class="btn btn-link text-decoration-none"><i class="bi bi-circle text-success" ></i> Active</button>
+                                    <button ng-class="{'active_btn': archive_btn, 'link-secondary': !archive_btn}" ng-click="active_btn = false; archive_btn = true; starred_btn = false; note_fetcher('archived')" class="btn btn-link text-decoration-none link-secondary"><i class="bi bi-archive-fill"></i> Archived</button>
+                                    <button ng-class="{'active_btn': starred_btn, 'link-secondary': !starred_btn}" ng-click="active_btn = false; archive_btn = false; starred_btn = true; fetch_all_starred()" class="btn btn-link link-secondary text-decoration-none"><i class="bi bi-star-fill text-warning"></i> Starred</button>
+                                </div>
                             </div>
                         </div>
-                        
                         
                         <div class="mb-2" style="max-height: 100vh; overflow-y: scroll;">
                             
@@ -253,8 +261,7 @@ if(isset($_GET['logout'])) {
                             
                             <!-- MOBILE - notecard -->
                             <!-- data-bs-toggle="modal" data-bs-target="#update-note-modal" -->
-                            <!-- data-bs-toggle="offcanvas" data-bs-target="#offcan-viewnote" -->
-                            <a href="javascript:void(0)" data-bs-toggle="modal" data-bs-target="#update-note-modal" ng-repeat="note in notes_list | filter:search_note" class="link link-light text-decoration-none d-lg-none">
+                            <a ng-show="note_headers" href="javascript:void(0)"  ng-repeat="note in notes_list | filter:search_note" class="link link-light text-decoration-none d-lg-none">
                                 <div class="rounded-2 p-3 mb-3 " 
                                 ng-click="selectNote(note.ID); view_note(note.ID)" 
                                 ng-style="{
@@ -293,6 +300,134 @@ if(isset($_GET['logout'])) {
                                     
                                 </div>
                             </a>
+
+
+
+
+
+                            <!-- view and edit for mobile -->
+                            <div ng-show="edit_note_mobile" class="mt-1">
+                                
+
+                                
+                                <!-- note contents -->
+                                <div class="mt-2">
+
+                                    <div class="d-flex">
+                                        <!-- note title -->
+                                        <h1 class="fw-bold" ng-hide="show_title_edit">
+                                            {{update_title}}
+                                            <span style="font-size: 16px;"><button ng-click="show_title_edit = true;" class="btn btn-link"><i class="bi bi-pencil-square"></i></button></span>
+                                        </h1>         
+
+                                        <!-- close button -->
+                                        <div class="ms-auto">
+                                            <button ng-click="edit_note_mobile = false; note_headers = true;" class="btn btn-link link-danger text-decoration-none fs-5"><i class="bi bi-x-lg"></i></button>
+                                        </div>                                    
+                                    </div>
+                                    
+                                    
+                                    <!-- note title hidden input -->
+                                    <div class="mt-2" ng-show="show_title_edit">
+                                        <input ng-model="update_title" type="text" class="form-control-plaintext display-4 fw-bold text-white" placeholder="Note title...">
+                                    </div>
+                                    
+                                    <!-- subject -->
+                                    <div class="mt-2 mb-3">
+                                        <input maxlength="100" ng-model="update_subject" style="width: auto; display: inline-block;" id="createnote_subj" type="text" class="form-control form-control-sm bg-dark border border-warning text-white" placeholder="subject">
+                                    </div>
+                    
+
+                                    <p class="text-secondary m-0">Created on <span class="text-info">{{update_date_created | date:'MMM dd, yyyy'}}</span></p>
+                                    <p class="text-secondary m-0">Modified on <span class="text-info">{{update_last_mod | date:'MMM dd, yyyy HH:mm a'}}</span></p>
+                    
+                                    <!-- tools -->
+                                    <div class="d-flex align-items-center justify-content-end mt-3">
+                                        <button data-bs-toggle="tooltip" title="Star this note" data-bs-placement="top" ng-click="updatenote_starred()" class="btn  btn-link link-warning"><i ng-class="{'bi-star-fill': update_starred === 'true', 'bi-star': update_starred !== 'true'}" class="bi "></i></button>
+                                        <button ng-hide="update_archived == 'archived'" ng-click="archive_note()" data-bs-toggle="tooltip" title="Archive this note" data-bs-placement="top" class="btn  btn-link link-info"><i class="bi bi-archive-fill"></i></button>
+                                        <button ng-click="unarchive_note()" ng-show="update_archived == 'archived'" data-bs-toggle="tooltip" title="Unarchive" data-bs-placement="top" class="btn  btn-link link-success text-decoration-none"><i class="bi bi-archive"></i></button>
+                                    </div>
+                    
+
+                                    <!-- quill text editor -->
+                                    <div class=" rounded-2" >                        
+                                        <div id="editor-view-note-mobile"  style="max-height: 400px; width: 100%; overflow-y: scroll;"></div>                        
+                                    </div>                    
+                    
+
+                                    <div class="mt-3 text-end">
+                                        <button ng-click="update_note_mobile()" class="btn btn-sm btn-info">Save <i class="bi bi-arrow-right"></i></button>
+                                    </div>
+                
+                    
+                                </div>                                
+
+                            </div>
+
+
+
+
+                            <!-- create note for mobile -->
+                            <div ng-show="create_note_mobile" class="mt-1">
+                                
+
+                                <!-- headers -->
+                                <div class="d-flex align-items-center">
+                                    <h2 class="fw-bold">Create a Note</h2>
+
+                                    <div class="ms-auto">
+                                        <!-- close button -->
+                                        <div class="ms-auto">
+                                            <button ng-click="create_note_mobile = false; note_headers = true;" class="btn btn-link link-danger text-decoration-none fs-5"><i class="bi bi-x-lg"></i></button>
+                                        </div>                                    
+                                    </div>
+                                </div>
+
+
+                                <!-- main content -->
+                                <div class="mt-3">
+
+                                    <!-- note title -->
+                                    <input ng-model="createnote_title" type="text" class="form-control-plaintext display-4 fw-bold text-white" placeholder="Note title...">
+
+                                    <!-- subject -->
+                                    <div class="mt-2 mb-3">
+                                        <input maxlength="100" ng-model="createnote_subject" style="width: auto; display: inline-block;" id="createnote_subj" type="text" class="form-control form-control-sm text-white bg-dark border border-warning" placeholder="subject">
+                                    </div>
+                
+                                    <p class="text-info m-0">
+                                        Today <i class="bi bi-dash-lg"></i> <span class="fw-bold text-white">{{ currentDate | date:'MMM dd, yyyy' }}</span>
+                                    </p>
+                
+
+                                    <!-- error message -->
+                                    <p class="text-danger mt-2">{{createnote_err_message}}</p>
+                                    <div class="my-3" ng-repeat="error in error_messages">
+                                        <p class="text-danger">Error: {{error}}</p>
+                                    </div>
+                
+
+                                    <!-- note star -->
+                                    <div class="d-flex align-items-center justify-content-end">
+                                        <button data-bs-toggle="tooltip" title="Star this note" data-bs-placement="top"  ng-click="star_note()" class="btn  btn-link link-warning fs-3"><i ng-class="{'bi-star-fill' : createnote_starred, 'bi-star' : !createnote_starred}" class="bi"></i></button>                            
+                                    </div>
+                
+                                    <!-- quill text editor -->
+                                    <div class=" rounded-2" >                        
+                                        <div id="editor-create-note-mobile" style="height: 300px; overflow-y: scroll;"></div>                        
+                                    </div>                    
+                
+                                    <div class="text-end mt-2">
+                                        <button ng-click="create_new_note_mobile()" class="btn btn-link link-info text-decoration-none">Create <i class="bi bi-arrow-right"></i></button>
+                                    </div>
+
+
+                                </div>
+
+
+                
+
+                            </div>
                             
                             
                             
@@ -505,248 +640,6 @@ if(isset($_GET['logout'])) {
             </div>                        
         </div>                
     </div>
-    
-    
-    
-    
-    
-    
-    
-    
-    <!-- Modals -->
-    
-    
-    <!-- modal - update note -->
-    <div class="modal fade " id="update-note-modal" tabindex="-1" aria-labelledby="update-note-modal" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-scrollable">
-            <div class="modal-content">
-                
-                
-                <div class="d-flex p-2">
-
-
-                    <h2 class="fw-bold">View a Note</h2>
-
-                    <!-- x button -->
-                    <div class="ms-auto text-end">
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                </div>
-
-
-                
-                <div class="modal-header flex-column align-items-start">
-                    
-                    
-                    <!-- note title -->
-                    <h1 class="fw-bold" ng-hide="show_title_edit">
-                        {{update_title}}
-                        <span style="font-size: 16px;"><button ng-click="show_title_edit = true;" class="btn btn-link"><i class="bi bi-pencil-square"></i></button></span>
-                    </h1>                        
-                    
-                    <!-- note title hidden input -->
-                    <div class="mt-2" ng-show="show_title_edit">
-                        <input ng-model="update_title" type="text" class="form-control-plaintext display-4 fw-bold" placeholder="Note title...">
-                    </div>
-                    
-                    <!-- subject -->
-                    <div class="mt-2 mb-3">
-                        <input maxlength="100" ng-model="update_subject" style="width: auto; display: inline-block;" id="createnote_subj" type="text" class="form-control form-control-sm bg-dark border border-warning text-white" placeholder="subject">
-                    </div>
-                    
-                    <p class="text-secondary m-0">Created on <span class="text-info">{{update_date_created | date:'MMM dd, yyyy'}}</span></p>
-                    <p class="text-secondary m-0">Modified on <span class="text-info">{{update_last_mod | date:'MMM dd, yyyy HH:mm a'}}</span></p>
-                    
-                    
-                </div>
-                
-                <div class="modal-body p-1" style="min-height: 300px;">
-                    
-                    
-                    <!-- tools -->
-                    <div class="d-flex align-items-center justify-content-end">
-                        <button data-bs-toggle="tooltip" title="Star this note" data-bs-placement="top" ng-click="updatenote_starred()" class="btn  btn-link link-warning"><i ng-class="{'bi-star-fill': update_starred === 'true', 'bi-star': update_starred !== 'true'}" class="bi "></i></button>
-                        <button ng-hide="update_archived == 'archived'" ng-click="archive_note()" data-bs-toggle="tooltip" title="Archive this note" data-bs-placement="top" class="btn  btn-link link-info"><i class="bi bi-archive-fill"></i></button>
-                        <button ng-click="unarchive_note()" ng-show="update_archived == 'archived'" data-bs-toggle="tooltip" title="Unarchive" data-bs-placement="top" class="btn  btn-link link-success text-decoration-none"><i class="bi bi-archive"></i></button>
-                    </div>
-                    
-                    
-                    
-                    
-                    
-                    <!-- quill text editor -->
-                    <div class=" rounded-2" >                        
-                        <div id="editor-view-note-mobile" class="h-100" style="min-height: 250px; width: 100%;"></div>                        
-                    </div>                    
-                    
-                </div>
-                
-                <div class="modal-footer">
-                    <button ng-click="update_note_mobile()" class="btn btn-link link-info text-decoration-none">Save <i class="bi bi-arrow-right"></i></button>
-                </div>
-                
-                
-                
-            </div>
-        </div>
-    </div>
-    
-    
-    
-    
-    <!-- modal - create new note -->
-    <div class="modal fade " id="create-note-modal" tabindex="-1" aria-labelledby="create-note-modal" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-scrollable">
-            <div class="modal-content p-2">
-                
-
-                
-
-                <div class="d-flex p-2">
-
-
-                    <h2 class="fw-bold">Create a Note</h2>
-
-                    <!-- x button -->
-                    <div class="ms-auto text-end">
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                </div>
-
-                
-
-                <!-- modal header -->
-                <div class="modal-header flex-column align-items-start">
-                                        
-                    <!-- note title -->                        
-                    <div >
-                        <input ng-model="createnote_title" type="text" class="form-control-plaintext display-4 fw-bold" placeholder="Note title...">
-                    </div>
-                    
-                    
-                    <!-- subject -->
-                    <div class="mt-2 mb-3">
-                        <input maxlength="100" ng-model="createnote_subject" style="width: auto; display: inline-block;" id="createnote_subj" type="text" class="form-control form-control-sm text-white bg-dark border border-warning" placeholder="subject">
-                    </div>
-                    
-                    <p class="text-info m-0">
-                        Today <i class="bi bi-dash-lg"></i> <span class="fw-bold text-dark">{{ currentDate | date:'MMM dd, yyyy' }}</span>
-                    </p>
-                    
-
-                    <!-- error message -->
-                    <p class="text-danger mt-5">{{createnote_err_message}}</p>
-                    <div class="my-3" ng-repeat="error in error_messages">
-                        <p class="text-danger">Error: {{error}}</p>
-                    </div>
-                    
-                    
-                </div>
-
-
-
-
-                <!-- modal body -->
-                <div class="modal-body p-1" style="min-height: 300px;">
-                    
-                    
-                    <!-- note star -->
-                    <div class="d-flex align-items-center justify-content-end">
-                        <button data-bs-toggle="tooltip" title="Star this note" data-bs-placement="top"  ng-click="star_note()" class="btn  btn-link link-warning fs-3"><i ng-class="{'bi-star-fill' : createnote_starred, 'bi-star' : !createnote_starred}" class="bi"></i></button>                            
-                    </div>
-                    
-                    
-                    
-                    <!-- quill text editor -->
-                    <div class=" rounded-2" >                        
-                        <div id="editor-create-note-mobile" class="h-100" style="min-height: 250px;"></div>                        
-                    </div>                    
-                    
-                </div>
-                    
-                
-                
-                <!-- modal footer -->
-                <div class="modal-footer">
-                    <button ng-click="create_new_note_mobile()" class="btn btn-link link-info text-decoration-none">Create <i class="bi bi-arrow-right"></i></button>
-                </div>
-                
-
-
-
-            </div>
-        </div>
-    </div>
-
-
-
-
-
-
-
-
-
-
-
-    <!-- OFFCANVAS - update and view note -->
-
-    <div class="offcanvas offcanvas-start " tabindex="-1" id="offcan-viewnote" aria-labelledby="offcanvasLabel">
-
-        <div class="offcanvas-header">
-            <h2 class="fw-bold">View a Note</h2>
-            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>            
-        </div>
-
-        <div class="offcanvas-body">
-            
-            
-            <!-- note title -->
-            <h1 class="fw-bold" ng-hide="show_title_edit">
-                {{update_title}}
-                <span style="font-size: 16px;"><button ng-click="show_title_edit = true;" class="btn btn-link"><i class="bi bi-pencil-square"></i></button></span>
-            </h1>                        
-
-
-            <!-- note title hidden input -->
-            <div class="mt-2" ng-show="show_title_edit">
-                <input ng-model="update_title" type="text" class="form-control-plaintext display-4 fw-bold" placeholder="Note title...">
-            </div>
-            
-
-            <!-- subject -->
-            <div class="mt-2 mb-3">
-                <input maxlength="100" ng-model="update_subject" style="width: auto; display: inline-block;" id="createnote_subj" type="text" class="form-control form-control-sm bg-dark border border-warning text-white" placeholder="subject">
-            </div>
-            
-
-            <!-- date creation / date modified -->
-             <div class="mt-2">
-                <p class="text-secondary m-0">Created on <span class="text-info">{{update_date_created | date:'MMM dd, yyyy'}}</span></p>
-                <p class="text-secondary m-0">Modified on <span class="text-info">{{update_last_mod | date:'MMM dd, yyyy HH:mm a'}}</span></p>    
-             </div>
-            
-
-             <!-- tools -->
-             <div class="mt-4 d-flex align-items-center justify-content-end">
-                <button data-bs-toggle="tooltip" title="Star this note" data-bs-placement="top" ng-click="updatenote_starred()" class="btn  btn-link link-warning"><i ng-class="{'bi-star-fill': update_starred === 'true', 'bi-star': update_starred !== 'true'}" class="bi "></i></button>
-                <button ng-hide="update_archived == 'archived'" ng-click="archive_note()" data-bs-toggle="tooltip" title="Archive this note" data-bs-placement="top" class="btn  btn-link link-info"><i class="bi bi-archive-fill"></i></button>
-                <button ng-click="unarchive_note()" ng-show="update_archived == 'archived'" data-bs-toggle="tooltip" title="Unarchive" data-bs-placement="top" class="btn  btn-link link-success text-decoration-none"><i class="bi bi-archive"></i></button>
-            </div>
-            
-            <!-- quill text editor -->
-            <div class=" rounded-2 mt-3" >                        
-                <div id="editor-view-note-mobile" style="min-height: 250px; width: 100%;"></div>                        
-            </div>                    
-            
-
-            <div class="text-end mt-3">
-                <button ng-click="update_note_mobile()" class="btn btn-link link-info text-decoration-none">Save <i class="bi bi-arrow-right"></i></button>
-            </div>
-
-
-        </div>
-    </div>
-    
     
     
     
