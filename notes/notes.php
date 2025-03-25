@@ -295,11 +295,11 @@ if(isset($_GET['logout'])) {
                                     <small class="mb-3">{{note.date_created | date:'MMM dd, yyyy' }}</small>
                                     
                                     
-                                    <p class="fw-bold mt-5 fs-5">Subject</p>
-                                    <small class="text-secondary" >                                        
-                                        {{ note.fetch_note_subj }}
-                                    </small>                            
-                                    
+                                    <p class="mt-5">
+                                        <small class="text-secondary" >                                        
+                                            {{ note.fetch_note_subj }}
+                                        </small>                            
+                                    </p>
                                 </div>
                             </a>
                             
@@ -340,11 +340,12 @@ if(isset($_GET['logout'])) {
                                     <small class="mb-3">{{note.date_created | date:'MMM dd, yyyy' }}</small>
                                     
                                     
-                                    <p class="fw-bold mt-5 fs-5">Subject</p>
-                                    <small class="text-secondary" >                                        
-                                        {{ note.fetch_note_subj }}
-                                    </small>                            
                                     
+                                    <p class="mt-5">
+                                        <small class="text-secondary" >                                        
+                                            {{ note.fetch_note_subj }}
+                                        </small>                            
+                                    </p>
                                 </div>
                             </a>
 
@@ -367,20 +368,26 @@ if(isset($_GET['logout'])) {
                                             <span style="font-size: 16px;"><button ng-click="show_title_edit = true;" class="btn btn-link"><i class="bi bi-pencil-square"></i></button></span>
                                         </h1>         
 
+
+                                        <!-- note title hidden input -->
+                                        <div class="text-end" ng-show="show_title_edit">
+                                            <input style="border-bottom: 1px solid #36bcba;" ng-model="update_title" type="text" class="form-control-plaintext fs-2 fw-bold text-white" placeholder="Note title...">
+                                            <a style="font-size: 13px;" ng-click="show_title_edit = false;" href="javascript:;" class="link link-danger text-decoration-none">Cancel</a>
+                                        </div>
+                                    
+
+
                                         <!-- close button -->
                                         <div class="ms-auto">
                                             <button ng-click="edit_note_mobile = false; note_headers = true;" class="btn btn-link link-danger text-decoration-none fs-5"><i class="bi bi-x-lg"></i></button>
                                         </div>                                    
+                                        
                                     </div>
                                     
                                     
-                                    <!-- note title hidden input -->
-                                    <div class="mt-2" ng-show="show_title_edit">
-                                        <input ng-model="update_title" type="text" class="form-control-plaintext display-4 fw-bold text-white" placeholder="Note title...">
-                                    </div>
                                     
                                     <!-- subject -->
-                                    <div class="mt-2 mb-3">
+                                    <div class="mt-3 mb-3">
                                         <input maxlength="100" ng-model="update_subject" style="width: auto; display: inline-block;" id="createnote_subj" type="text" class="form-control form-control-sm bg-dark border border-warning text-white" placeholder="subject">
                                     </div>
                     
@@ -581,8 +588,9 @@ if(isset($_GET['logout'])) {
                         
                         
                         <!-- note title hidden input -->
-                        <div class="mt-2" ng-show="show_title_edit">
-                            <input ng-model="update_title" type="text" class="form-control-plaintext text-white display-4 fw-bold" placeholder="Note title...">
+                        <div class="mt-2 text-end col-xl-8 col-xxl-5" ng-show="show_title_edit">
+                            <input style="border-bottom: 1px solid #36bcba;" ng-model="update_title" type="text" class="form-control-plaintext text-white display-4 fw-bold" placeholder="Note title...">
+                            <a style="font-size: 13px;" ng-click="show_title_edit = false;" href="javascript:;" class="link link-danger text-decoration-none">Cancel</a>
                         </div>
                         
                         
@@ -601,6 +609,7 @@ if(isset($_GET['logout'])) {
                         
                         <!-- tools -->
                         <div class="mt-4 d-flex align-items-center justify-content-end">
+                            <button ng-click="delete_note()" data-bs-toggle="tooltip" title="Permanently delete this note" data-bs-placement="top" class="btn btn-link link-danger"><i class="bi bi-x-circle-fill"></i></button>
                             <button data-bs-toggle="tooltip" title="Star this note" data-bs-placement="top" ng-click="updatenote_starred()" class="btn  btn-link link-warning"><i ng-class="{'bi-star-fill': update_starred === 'true', 'bi-star': update_starred !== 'true'}" class="bi "></i></button>
                             <button ng-hide="update_archived == 'archived'" ng-click="archive_note()" data-bs-toggle="tooltip" title="Archive this note" data-bs-placement="top" class="btn  btn-link link-info"><i class="bi bi-archive-fill"></i></button>
                             <button ng-click="unarchive_note()" ng-show="update_archived == 'archived'" data-bs-toggle="tooltip" title="Unarchive" data-bs-placement="top" class="btn  btn-link link-success text-decoration-none"><i class="bi bi-archive"></i></button>
@@ -609,8 +618,8 @@ if(isset($_GET['logout'])) {
                         
                         
                         <!-- quill text editor -->
-                        <div class=" rounded-2" >                        
-                            <div class="text-white" id="editor-view-note" style="height: 50%;"></div>                        
+                        <div class=" rounded-2" style="height: inherit; overflow-y: scroll;">                        
+                            <div class="text-white" id="editor-view-note" style="max-height: 50%; overflow-y: scroll;"></div>                        
                         </div>
                         
                         

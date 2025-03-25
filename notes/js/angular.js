@@ -685,15 +685,15 @@ app.controller('angular_controller', function($scope, $http, $timeout, $sce) {
                     
                     // close mobile modal
                     $(".btn-close").click();
-
-
-            
+                    
+                    
+                    
                     
                     // show headers / hided create note for mobile
                     $scope.note_headers = true;
                     $scope.create_note_mobile = false;
-
-
+                    
+                    
                     
                     Swal.fire({
                         toast: true,
@@ -712,7 +712,7 @@ app.controller('angular_controller', function($scope, $http, $timeout, $sce) {
                     
                     // $scope.createnote_err_message = "Failed to save note: " + response.data;
                     $scope.error_messages.push('Failed to create this note.');
-
+                    
                     Swal.fire({
                         toast: true,
                         position: 'top-end',
@@ -725,7 +725,7 @@ app.controller('angular_controller', function($scope, $http, $timeout, $sce) {
                         timerProgressBar: false
                     });
                     
-
+                    
                 }
                 
                 
@@ -740,9 +740,9 @@ app.controller('angular_controller', function($scope, $http, $timeout, $sce) {
     
     
     
-
-
-
+    
+    
+    
     $scope.logout = function() {
         
         Swal.fire({
@@ -781,48 +781,87 @@ app.controller('angular_controller', function($scope, $http, $timeout, $sce) {
         
         
     }
-
-
-
-
-
-
-
-
-
-    // $scope.view_note_mobile = false;
-    // $scope.create_note_mobile = false;
-
-
-
     
     
     
     
     
+    
+    
+    
+    
+    
+    
+    
+    // for mobile viewing, updating, and creating
     $scope.note_headers = true;
     $scope.edit_note_mobile = false;
-
+    
     $scope.show_edit_note_mobile = function() {
-
+        
         $scope.note_headers = false;
-
+        
         $scope.edit_note_mobile = true;
-
+        
     }
-
-
-
+    
+    
+    
     $scope.create_note_mobile = false;
-
+    
     $scope.show_create_note_mobile = function() {
-
+        
         $scope.note_headers = false;
-
+        
         $scope.create_note_mobile = true;
-
+        
     }
-
+    
+    // ***************************************
+    
+    
+    
+    
+    
+    $scope.delete_note = function() {
+        
+        
+        
+        Swal.fire({
+            title: 'Permanent Delete',
+            html: "Do you want to permanently delete this note?",
+            icon: 'danger',
+            confirmButtonColor: "#36bcba",
+            cancelButtonColor: "red",
+            showCancelButton: true,
+            confirmButtonText: 'Confirm',
+            cancelButtonText: 'Cancel'
+        }).then((result) => {
+            
+            $http({
+                method: 'POST',
+                url: "api/archive_note.php",
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                data: $.param({ 
+                    note_id : $scope.current_note_id,                        
+                    
+                })
+                
+            }).then(function (response) {
+                
+                
+                
+                
+            } , function (error) {
+                
+                // handle error
+                
+            });;
+            
+        });
+        
+        
+    }
     
     
 });
