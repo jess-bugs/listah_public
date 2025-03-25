@@ -1,3 +1,11 @@
+// Swal.fire({
+//     title: 'Server Response',
+//     html:"Success: " + response.data.status ,
+//     icon: 'info',
+//     confirmButtonText: 'OK'
+// });
+
+
 var app = angular.module('angularApp', []);
 
 app.controller('angular_controller', function($scope, $http, $timeout) {
@@ -43,15 +51,12 @@ app.controller('angular_controller', function($scope, $http, $timeout) {
                     }, 3000);
 
 
-                    window.location.href = "/listah/notes/notes.php";
-                    
+                    window.location.href = "/listah/notes/notes.php";                    
                     
                 } else {
 
-                    // $scope.invalid_log = "Invalid username or password.";
-                    $scope.invalid_log = response.data.message;
-
-                    
+                    $scope.invalid_log = "Invalid username or password.";
+                    $scope.invalid_log = response.data.message;                    
 
                 }
 

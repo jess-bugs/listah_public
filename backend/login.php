@@ -22,7 +22,7 @@ if(isset($_POST['username']) && isset($_POST['password'])) {
         }
 
         
-        $query = "SELECT password FROM users WHERE BINARY user = ?";
+        $query = "SELECT password, user_id FROM users WHERE BINARY user = ?";
         $stmt = mysqli_prepare($conn, $query);
         
         
@@ -31,7 +31,7 @@ if(isset($_POST['username']) && isset($_POST['password'])) {
             mysqli_stmt_bind_param($stmt, "s", $username);
             mysqli_stmt_execute($stmt);
             
-            mysqli_stmt_bind_result($stmt, $storedHash);
+            mysqli_stmt_bind_result($stmt, $storedHash, $user_id);
             mysqli_stmt_fetch($stmt);
             mysqli_stmt_close($stmt);
             
@@ -39,12 +39,11 @@ if(isset($_POST['username']) && isset($_POST['password'])) {
                 
                 $response = ["status" => true, "message" => "Login Successful"];
                 
-
-                session_start();
+                echo json_encode($response);                
 
                 $_SESSION['user_logged_in'] = $response['status'];
+                $_SESSION['user_id'] = $user_id;
 
-                echo json_encode($response);
                 
             } else {
                 

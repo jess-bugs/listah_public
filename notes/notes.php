@@ -1,11 +1,27 @@
 
 <?php
 
-session_start();
+include 'php_config/functions.php';
 
 if(!isset($_SESSION['user_logged_in']) && $_SESSION['user_logged_in'] != true) {
 
     header('location: /listah/');
+}
+
+
+
+
+if(isset($_GET['logout'])) {
+        
+    $logout = $_GET['logout'];
+    
+    if($logout == 'y') {
+        
+        session_unset();
+        session_destroy();
+        
+        header('location: /listah/');
+    }
 }
 
 ?>
@@ -15,6 +31,10 @@ if(!isset($_SESSION['user_logged_in']) && $_SESSION['user_logged_in'] != true) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Listah!</title>
+    
+    <meta name="author" content="Jess Baggs">
+    <meta name="keywords" content="listah, listahan, notes, notes list, note taking">
+    <meta name="description" content="Create notes seamlessly anytime, anywhere with Listah!">
     
     
     <!-- jQuery -->
@@ -292,9 +312,12 @@ if(!isset($_SESSION['user_logged_in']) && $_SESSION['user_logged_in'] != true) {
                     <div id="create-note" ng-show="show_create_note_block">
                         <!-- header for content -->
                         <div class="mb-3 d-flex p-1 rounded-2" >                
-                            
-                            <div class="ms-auto me-2 d-inline">
+                            <div class="me-auto">
                                 <p class="text-white">Last logged: Feb 31, 2025</p>
+                            </div>
+                            
+                            <div class="ms-auto me-2 d-inline">                                                                
+                                <button ng-click="logout()" class="btn btn-link link-danger border border-danger"><i class="bi bi-power text-danger"></i></button>
                             </div>                                
                         </div>
                         
@@ -338,9 +361,8 @@ if(!isset($_SESSION['user_logged_in']) && $_SESSION['user_logged_in'] != true) {
                         
                         
                         <!-- save button -->
-                        <div class="mt-4 text-end">
-                            <button ng-click="create_new_note()" style="color: #36bcba;" class="btn btn-link text-decoration-none">Create <i class="bi bi-arrow-right"></i></button>
-                            <!-- ng-click="create_new_note()" -->
+                        <div class="my-4 text-end">
+                            <button ng-click="create_new_note()"  class="btn btn-sm btn-info">Create <i class="bi bi-arrow-right"></i></button>                            
                         </div>
                         
                     </div>
@@ -356,11 +378,11 @@ if(!isset($_SESSION['user_logged_in']) && $_SESSION['user_logged_in'] != true) {
                         <!-- header for content -->
                         <div class="mb-3 d-flex p-1 rounded-2" >                
                             <div class="me-auto">
-                                <a href="javascript:void(0)" class="link link-light fs-5 text-decoration-none"><i class="bi bi-arrow-clockwise"></i> Reset</a>
+                                <p class="text-white">Last logged: Feb 31, 2025</p>
                             </div>
                             
-                            <div class="ms-auto me-2 d-inline">
-                                <p class="text-white">Last logged: Feb 31, 2025</p>
+                            <div class="ms-auto me-2 d-inline">                                                                
+                                <button ng-click="logout()" class="btn btn-link link-danger border border-danger"><i class="bi bi-power text-danger"></i></button>
                             </div>                                
                         </div>
                         
@@ -411,8 +433,8 @@ if(!isset($_SESSION['user_logged_in']) && $_SESSION['user_logged_in'] != true) {
                         
                         
                         <!-- save button -->
-                        <div class="mt-4 text-end">
-                            <button ng-click="update_note()" class="btn btn-link link-info text-decoration-none">Save <i class="bi bi-arrow-right"></i></button>
+                        <div class="my-4 text-end">
+                            <button ng-click="update_note()" class="btn btn-sm btn-info">Save <i class="bi bi-arrow-right"></i></button>
                         </div>
                         
                     </div>

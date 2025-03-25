@@ -1,6 +1,6 @@
 <?php
 
-include '../../php_config/functions.php';
+include '../notes/php_config/functions.php';
 
 if(isset($_POST['username']) && isset($_POST['password'])) {
 

@@ -1,5 +1,6 @@
 <?php
 
+session_start();
 require '/var/www/vendor/autoload.php';
 
 
@@ -84,35 +85,6 @@ function php_db_insert($db_name, $table_name, array $columns, array $values) {
 
 
 
-// function for fetching in bulk
-// function php_db_fetch($db_name, $table_name, $descending) {
-
-//     $conn = mysqli_connect(DB_HOST, DB_USER, DB_PASS, $db_name);
-
-
-//     if (!$conn) {
-//         die("Database Connection failed: " . mysqli_connect_error());
-//     }
-
-//     $order = $descending ? 'DESC' : 'ASC';
-//     $query = "SELECT * FROM $table_name ORDER BY id $order";
-//     $stmt = mysqli_prepare($conn, $query);
-
-//     if ($stmt) {
-
-//         $exec = mysqli_stmt_execute($stmt);
-//         $result = mysqli_stmt_get_result($stmt);
-
-//         $data = [];
-//         while ($row = mysqli_fetch_assoc($result)) {
-//             $data[] = $row;
-//         }
-
-//         return json_encode($data);
-//     }
-
-//     mysqli_close($conn);
-// }
 
 function php_db_fetch($db_name, $table_name, $descending, $where_condition = "") {
     $conn = mysqli_connect(DB_HOST, DB_USER, DB_PASS, $db_name);
@@ -234,31 +206,13 @@ function php_db_update($db_name, $table_name, $id, array $columns, array $values
 
 
 
+// get userID
+function get_user_id() {
 
-// function php_db_update($db_name, $table_name, $id, $note_title, $note_content, $note_starred, $note_subject) {
-//     $conn = mysqli_connect(DB_HOST, DB_USER, DB_PASS, $db_name);
+    return $_SESSION['user_id'];
+}
 
-//     if (!$conn) {
-//         die("Database Connection failed: " . mysqli_connect_error());
-//     }
 
-//     $query = "UPDATE $table_name SET title = ?, content = ?, starred = ?, subject = ? WHERE id = ?";
-//     $stmt = mysqli_prepare($conn, $query);
 
-//     if ($stmt) {
-//         mysqli_stmt_bind_param($stmt, "ssssi", $note_title, $note_content, $note_starred, $note_subject, $id);
-//         $exec = mysqli_stmt_execute($stmt);
-
-//         if ($exec) {
-//             return true;
-//         } else {
-//             return 'Error: ' . mysqli_error($conn);
-//         }
-
-//         mysqli_stmt_close($stmt);
-//     }
-
-//     mysqli_close($conn);
-// }
 
 

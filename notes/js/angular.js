@@ -3,11 +3,11 @@ var app = angular.module('angularApp', []);
 app.controller('angular_controller', function($scope, $http, $timeout, $sce) {
     
     
-
-
+    
+    
     /******* used for background setting for selected card */
     $scope.selectedNoteId = null;
-
+    
     $scope.selectNote = function(noteId) {
         $scope.selectedNoteId = noteId;
     };
@@ -27,13 +27,13 @@ app.controller('angular_controller', function($scope, $http, $timeout, $sce) {
     
     $scope.currentDate = new Date();
     $scope.default_note_stat = 'active';
-
-
-
+    
+    
+    
     $scope.active_btn = true;
     $scope.archive_btn = false;
     $scope.starred_btn = false;
-
+    
     
     
     // tools for quill JS
@@ -78,12 +78,12 @@ app.controller('angular_controller', function($scope, $http, $timeout, $sce) {
         },
         theme: 'snow'
     });
-
-
-
-
-
-
+    
+    
+    
+    
+    
+    
     const quill_update_mobile = new Quill('#editor-view-note-mobile', {
         
         modules: {
@@ -91,13 +91,13 @@ app.controller('angular_controller', function($scope, $http, $timeout, $sce) {
         },
         theme: 'snow'
     });
-
-
     
-
-
-
-
+    
+    
+    
+    
+    
+    
     const quill_create_mobile = new Quill('#editor-create-note-mobile', {
         
         modules: {
@@ -105,16 +105,8 @@ app.controller('angular_controller', function($scope, $http, $timeout, $sce) {
         },
         theme: 'snow'
     });
-
-
-
-
-
     
     
-    // set to large font
-    quill.format('size', 'large');
-    quill_update.format('size', 'large');
     
     // function to create the note
     $scope.create_new_note = function() {
@@ -174,12 +166,15 @@ app.controller('angular_controller', function($scope, $http, $timeout, $sce) {
                     $scope.fetch_notes($scope.default_note_stat);
                     
                     Swal.fire({
-                        title: 'Success!',
-                        html: "Note Created!",
+                        toast: true,
+                        position: 'top-end',
                         icon: 'success',
-                        confirmButtonText: 'OK'
+                        title: 'Note created!',
+                        showConfirmButton: false,
+                        showCancelButton: false,
+                        timer: 2000,
+                        timerProgressBar: false
                     });
-                    
                     
                 } else {
                     
@@ -297,7 +292,7 @@ app.controller('angular_controller', function($scope, $http, $timeout, $sce) {
             // quill_update.clipboard.dangerouslyPasteHTML($scope.text_content);
             quill_update.root.innerHTML = $scope.html_content;
             quill_update_mobile.root.innerHTML = $scope.html_content;
-
+            
             
             
             // quill_update.root.innerHTML = $scope.update_content
@@ -347,13 +342,17 @@ app.controller('angular_controller', function($scope, $http, $timeout, $sce) {
             // re-fetch notes list
             $scope.fetch_notes($scope.default_note_stat);
             
-            Swal.fire({
-                title: 'Success!',
-                html: "Changes saved!",
-                icon: 'success',
-                confirmButtonText: 'OK'
-            });
             
+            Swal.fire({
+                toast: true,
+                position: 'top-end',
+                icon: 'success',
+                title: 'Changes Saved!',
+                showConfirmButton: false,
+                showCancelButton: false,
+                timer: 2000,
+                timerProgressBar: false
+            });
             
             $scope.view_note($scope.current_note_id);
             
@@ -379,7 +378,7 @@ app.controller('angular_controller', function($scope, $http, $timeout, $sce) {
     
     
     
-
+    
     $scope.archive_err_message = "";
     
     $scope.archive_note = function() {
@@ -406,30 +405,34 @@ app.controller('angular_controller', function($scope, $http, $timeout, $sce) {
                     })
                     
                 }).then(function (response) {
-                   
-
+                    
+                    
                     if(response.data > 0) {
-
+                        
                         Swal.fire({
-                            title: 'Success!',
-                            html: "Moved to archive!",
+                            toast: true,
+                            position: 'top-end',
                             icon: 'success',
-                            confirmButtonText: 'OK'
+                            title: 'Note Archived!',
+                            showConfirmButton: false,
+                            showCancelButton: false,
+                            timer: 2000,
+                            timerProgressBar: false
                         });
-
-
+                        
                         $scope.fetch_notes($scope.default_note_stat);
+                        $scope.view_note($scope.current_note_id);
                         
                     } else {
-
-
+                        
+                        
                         $scope.archive_err_message = "There was a problem archiving this note.";
                     }
                     
                     
-        
+                    
                 } , function (error) {
-            
+                    
                     $scope.error_messages.push('An error occured while archiving this note.');
                     
                 });;
@@ -440,19 +443,19 @@ app.controller('angular_controller', function($scope, $http, $timeout, $sce) {
         
     }
     
-
-
-
-
-
-
-
-
+    
+    
+    
+    
+    
+    
+    
+    
     // function to unarchive the note
     $scope.unarchive_note = function() {
-
+        
         Swal.fire({
-            title: 'Move to Archive',
+            title: 'Remove from Archives',
             html: "Do you want to remove this from the archives?",
             icon: 'warning',
             confirmButtonColor: "#36bcba",
@@ -472,30 +475,34 @@ app.controller('angular_controller', function($scope, $http, $timeout, $sce) {
                     })
                     
                 }).then(function (response) {
-                                       
-
+                    
+                    
                     if(response.data > 0) {
-
+                        
                         Swal.fire({
-                            title: 'Success!',
-                            html: "Moved to archive!",
+                            toast: true,
+                            position: 'top-end',
                             icon: 'success',
-                            confirmButtonText: 'OK'
+                            title: 'Note removed from the archive!',
+                            showConfirmButton: false,
+                            showCancelButton: false,
+                            timer: 2000,
+                            timerProgressBar: false
                         });
-
-
+                        
                         $scope.fetch_notes($scope.default_note_stat);
+                        $scope.view_note($scope.current_note_id);
                         
                     } else {
-
-
+                        
+                        
                         $scope.archive_err_message = "Server Response: " + response.data;
                     }
                     
                     
-        
+                    
                 } , function (error) {
-            
+                    
                     $scope.error_messages.push('An error occured while unarchiving this note.');
                     
                 });;
@@ -503,46 +510,46 @@ app.controller('angular_controller', function($scope, $http, $timeout, $sce) {
             }
             
         });        
-
+        
         
     }
-
-
-
-
-
-
-
-
-
-
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     $scope.note_fetcher = function(status) {
-
+        
         $scope.fetch_notes(status);
         $scope.default_note_stat = status;
-
+        
     }
-
-
-
-
+    
+    
+    
+    
     $scope.fetch_all_starred = function() {
-
-
+        
+        
         $scope.default_note_stat = 'active';
         $scope.fetch_notes($scope.default_note_stat, "true");
-
+        
     }
-
-
-
-
-
     
-
+    
+    
+    
+    
+    
+    
     // MOBILE FUNCTIONS
     $scope.update_note_mobile = function() {
-
+        
         // updated quill content
         $scope.quill_update_mobile = quill_update_mobile.root.innerHTML;
         
@@ -563,39 +570,62 @@ app.controller('angular_controller', function($scope, $http, $timeout, $sce) {
         }).then(function (response) {
             
             
-            
-            
-            // re-fetch notes list
-            $scope.fetch_notes($scope.default_note_stat);
-            
-            Swal.fire({
-                title: 'Success!',
-                html: "Changes saved!",
-                icon: 'success',
-                confirmButtonText: 'OK'
-            });
-            
-            
-            $scope.view_note($scope.current_note_id);
+            if(response.data > 0) {
+                
+                
+                // re-fetch notes list
+                $scope.fetch_notes($scope.default_note_stat);
+                
+                $scope.view_note($scope.current_note_id);
+                
+                
+                Swal.fire({
+                    toast: true,
+                    position: 'top-end',
+                    icon: 'success',
+                    title: 'Changes saved!',
+                    showConfirmButton: false,
+                    showCancelButton: false,
+                    timer: 2000,
+                    timerProgressBar: false
+                });
+                
+                
+            } else {
+                
+                Swal.fire({
+                    toast: true,
+                    position: 'top-end',
+                    icon: 'error',
+                    title: 'Failed!',
+                    html: "Error: " + response.data,
+                    showConfirmButton: false,
+                    showCancelButton: false,
+                    timer: 2000,
+                    timerProgressBar: false
+                });
+                
+            }
             
             
             
             
         }, function (error) {
             
+            
             $scope.error_messages.push('An error occured while updating this note.');
             
         });
-
+        
         
     }
-
     
     
-
-
-
-
+    
+    
+    
+    
+    
     $scope.create_new_note_mobile = function() {
         
         $scope.createnote_quill_content_mobile = quill_create_mobile.root.innerHTML;
@@ -611,7 +641,7 @@ app.controller('angular_controller', function($scope, $http, $timeout, $sce) {
             
         } else {
             
-
+            
             
             
             $http({
@@ -649,16 +679,20 @@ app.controller('angular_controller', function($scope, $http, $timeout, $sce) {
                     
                     // re-fetch notes list
                     $scope.fetch_notes($scope.default_note_stat);
-
-
+                    
+                    
                     // close mobile modal
                     $(".btn-close").click();
                     
                     Swal.fire({
-                        title: 'Success!',
-                        html: "Note Created!",
+                        toast: true,
+                        position: 'top-end',
                         icon: 'success',
-                        confirmButtonText: 'OK'
+                        title: 'Changes saved!',
+                        showConfirmButton: false,
+                        showCancelButton: false,
+                        timer: 2000,
+                        timerProgressBar: false
                     });
                     
                     
@@ -667,6 +701,20 @@ app.controller('angular_controller', function($scope, $http, $timeout, $sce) {
                     
                     // $scope.createnote_err_message = "Failed to save note: " + response.data;
                     $scope.error_messages.push('Failed to create this note.');
+
+                    Swal.fire({
+                        toast: true,
+                        position: 'top-end',
+                        icon: 'error',
+                        title: 'Failed!',
+                        html: "Error: " + response.data,
+                        showConfirmButton: false,
+                        showCancelButton: false,
+                        timer: 2000,
+                        timerProgressBar: false
+                    });
+                    
+
                 }
                 
                 
@@ -678,7 +726,49 @@ app.controller('angular_controller', function($scope, $http, $timeout, $sce) {
         }
         
     }
+    
+    
+    
 
 
-
+    
+    $scope.logout = function() {
+        
+        Swal.fire({
+            title: 'Logout',
+            html: "Do you really want to logout?",
+            icon: 'warning',
+            
+            confirmButtonColor: "#36bcba",
+            cancelButtonColor: "red",
+            showCancelButton: true,
+            confirmButtonText: 'Confirm',
+            cancelButtonText: 'Cancel'
+        }).then(result => {
+            
+            if(result.isConfirmed) {
+                
+                
+                Swal.fire({
+                    toast: true,
+                    position: 'top-end',
+                    icon: 'warning',
+                    title: 'Logging out...',
+                    showConfirmButton: false,
+                    showCancelButton: false,
+                    timer: 2000,
+                    timerProgressBar: true
+                });
+                
+                $timeout(function() {                                        
+                    window.location.href = "notes.php?logout=y";
+                }, 2000);
+                
+            }
+            
+        });
+        
+        
+    }
+    
 });
