@@ -11,7 +11,12 @@ app.controller('angular_controller', function($scope, $http, $timeout, $sce) {
     $scope.selectNote = function(noteId) {
         $scope.selectedNoteId = noteId;
         
-        $scope.show_edit_note_mobile();
+        // $scope.show_edit_note_mobile();
+
+        $scope.note_headers = false;
+        $scope.edit_note_mobile = false;
+        $scope.loading_anim = true;
+
     };
     /*******************************************************/
     
@@ -297,7 +302,17 @@ app.controller('angular_controller', function($scope, $http, $timeout, $sce) {
             
             
             
-            // quill_update.root.innerHTML = $scope.update_content
+
+            // mobile - show animation for 1 second before displaying note content
+            $timeout(function(){
+
+                $scope.note_headers = false;
+                $scope.edit_note_mobile = true;
+                $scope.loading_anim = false;
+
+            }, 500)
+
+            
             
             
             

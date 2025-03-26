@@ -189,7 +189,15 @@ if(isset($_GET['logout'])) {
                             <!-- search for a note -->
                             <div class="my-3">
                                 <p class="fw-bold"><i class="bi bi-search"></i> Search for a note</p>
-                                <input ng-model="search_note" style="border: 1px solid #1282A2; font-size: 16px;" class="ms-auto form-control form-control-lg form-control-sm text-dark" type="text" placeholder="keyword...">                            
+                                <div class="d-flex">
+
+                                    <div class="me-auto flex-grow-1">
+                                        <input ng-model="search_note" style="border: 1px solid #1282A2; font-size: 16px;" class=" form-control form-control-sm text-dark" type="text" placeholder="keyword...">                            
+                                    </div>
+
+                                    <button ng-click="search_note = ''" class="ms-1 btn btn-link link-warning"><i class="bi bi-x-square-fill"></i></button>
+                                </div>
+                                
                             </div>
                             
                             
@@ -230,7 +238,15 @@ if(isset($_GET['logout'])) {
                             <!-- search for a note -->
                             <div class="my-3">
                                 <p class="fw-bold"><i class="bi bi-search"></i> Search for a note</p>
-                                <input ng-model="search_note" style="border: 1px solid #1282A2; font-size: 16px;" class="ms-auto form-control form-control-lg form-control-sm text-dark" type="text" placeholder="keyword...">                            
+                                <div class="d-flex">
+
+                                    <div class="me-auto flex-grow-1">
+                                        <input ng-model="search_note" style="border: 1px solid #1282A2; font-size: 16px;" class=" form-control form-control-sm text-dark" type="text" placeholder="keyword...">                            
+                                    </div>
+
+                                    <button ng-click="search_note = ''" class="ms-1 btn btn-link link-warning"><i class="bi bi-x-square-fill"></i></button>
+                                </div>
+                                
                             </div>
                             
                             
@@ -309,15 +325,24 @@ if(isset($_GET['logout'])) {
                             </a>
                             
                             
+                            <!-- empty note animation -->
+                            <div ng-show="notes_list.length === 0">                            
+                                <div id="empty-notes" style="height: 250px;"></div>
+                                <p style="font-size: 14px;" class="text-secondary text-center text-secondary">Nothing found</p>
+                            </div>
+
                             
-                            <div class="mt-2" ng-show="loading_anim">
+
+
+                            <!-- viewnote loading animation for mobile -->
+                            <div class="mt-2 d-lg-none" ng-show="loading_anim">
                                 <div id="loading-note" style="height: 200px;"></div>
                                 <p style="font-size: 14px;" class="m-0 text-center text-secondary">fetching your note...</p>
                             </div>
 
                             
+                            
                             <!-- MOBILE - notecard -->
-                            <!-- data-bs-toggle="modal" data-bs-target="#update-note-modal" -->
                             <a ng-show="note_headers" href="javascript:void(0)"  ng-repeat="note in notes_list | filter:search_note" class="link link-light text-decoration-none d-lg-none">
                                 <div class="rounded-2 p-3 mb-3 " 
                                 ng-click="selectNote(note.ID); view_note(note.ID)" 
@@ -409,17 +434,17 @@ if(isset($_GET['logout'])) {
                                     <p class="text-secondary m-0">Modified on <span class="text-info">{{update_last_mod | date:'MMM dd, yyyy HH:mm a'}}</span></p>
                     
                                     <!-- tools -->
-                                    <div class="d-flex align-items-center mt-4">
+                                    <div class="d-flex mt-4 mb-2">
                                         
-                                        <button ng-click="update_note_mobile()" class="btn btn-link link-success fs-4"><i class="bi bi-check2"></i></i></button>
                                         
-                                        <div class="ms-auto">
+                                        <div class="me-auto">
                                             <button ng-click="delete_note()" class="btn btn-link link-danger"><i class="bi bi-x-circle-fill"></i></button>
                                             <button data-bs-toggle="tooltip" title="Star this note" data-bs-placement="top" ng-click="updatenote_starred()" class="btn  btn-link link-warning"><i ng-class="{'bi-star-fill': update_starred === 'true', 'bi-star': update_starred !== 'true'}" class="bi "></i></button>
                                             <button ng-hide="update_archived == 'archived'" ng-click="archive_note()" data-bs-toggle="tooltip" title="Archive this note" data-bs-placement="top" class="btn  btn-link link-info"><i class="bi bi-archive-fill"></i></button>
                                             <button ng-click="unarchive_note()" ng-show="update_archived == 'archived'" data-bs-toggle="tooltip" title="Unarchive" data-bs-placement="top" class="btn  btn-link link-success text-decoration-none"><i class="bi bi-archive"></i></button>
                                         </div>
                                         
+                                        <button ng-click="update_note_mobile()" class="btn btn-sm btn-success"><i class="bi bi-check2"></i> Save</button>
                                     </div>
                     
 
@@ -562,10 +587,12 @@ if(isset($_GET['logout'])) {
                         
                         
                         <!-- quill text editor -->
-                        <div class="rounded-2 mt-2" >                        
-                            <div class="text-white bg-dark" id="editor-create-note" style="height: 50%;"></div>                        
+                        <div class="rounded-2 mt-2" style="height: 100vh;">                        
+                            <div class="text-white bg-dark" id="editor-create-note" style="height: 85%; overflow-y: scroll;"></div>                        
                         </div>
-                                                
+                          
+                        
+                        
                     </div>
                     
                     
@@ -620,19 +647,24 @@ if(isset($_GET['logout'])) {
                         
                         
                         <!-- tools -->
-                        <div class="mt-4 d-flex align-items-center justify-content-end">
-                            <button ng-click="update_note()" data-bs-toggle="tooltip" title="Update this note" data-bs-placement="top" class="btn btn-link link-success fs-4"><i class="bi bi-check2"></i></button>
-                            <button ng-click="delete_note()" data-bs-toggle="tooltip" title="Permanently delete this note" data-bs-placement="top" class="btn btn-link link-danger"><i class="bi bi-x-circle-fill"></i></button>
-                            <button data-bs-toggle="tooltip" title="Star this note" data-bs-placement="top" ng-click="updatenote_starred()" class="btn  btn-link link-warning"><i ng-class="{'bi-star-fill': update_starred === 'true', 'bi-star': update_starred !== 'true'}" class="bi "></i></button>
-                            <button ng-hide="update_archived == 'archived'" ng-click="archive_note()" data-bs-toggle="tooltip" title="Archive this note" data-bs-placement="top" class="btn  btn-link link-info"><i class="bi bi-archive-fill"></i></button>
-                            <button ng-click="unarchive_note()" ng-show="update_archived == 'archived'" data-bs-toggle="tooltip" title="Unarchive" data-bs-placement="top" class="btn  btn-link link-success text-decoration-none"><i class="bi bi-archive"></i></button>
+                        <div class="mt-4 d-flex mb-2">
+                            
+                            <div class="me-auto">
+                                <button ng-click="delete_note()" data-bs-toggle="tooltip" title="Permanently delete this note" data-bs-placement="top" class="btn btn-link link-danger"><i class="bi bi-x-circle-fill"></i></button>
+                                <button data-bs-toggle="tooltip" title="Star this note" data-bs-placement="top" ng-click="updatenote_starred()" class="btn  btn-link link-warning"><i ng-class="{'bi-star-fill': update_starred === 'true', 'bi-star': update_starred !== 'true'}" class="bi "></i></button>
+                                <button ng-hide="update_archived == 'archived'" ng-click="archive_note()" data-bs-toggle="tooltip" title="Archive this note" data-bs-placement="top" class="btn  btn-link link-info"><i class="bi bi-archive-fill"></i></button>
+                                <button ng-click="unarchive_note()" ng-show="update_archived == 'archived'" data-bs-toggle="tooltip" title="Unarchive" data-bs-placement="top" class="btn  btn-link link-success text-decoration-none"><i class="bi bi-archive"></i></button>
+                            </div>
+
+                            <button ng-click="update_note()" data-bs-toggle="tooltip" title="Update this note" data-bs-placement="top" class="btn btn-sm btn-success"><i class="bi bi-check2"></i> Save</button>
+                            
                         </div>
                         
                         
                         
                         <!-- quill text editor -->
-                        <div class=" rounded-2" style="height: inherit; overflow-y: scroll;">                        
-                            <div class="text-white" id="editor-view-note" style="max-height: 50%; overflow-y: scroll;"></div>                        
+                        <div class=" rounded-2" style="height: 100vh;">                        
+                            <div class="text-white" id="editor-view-note" style="height: 85%; overflow-y: scroll;"></div>                        
                         </div>
                         
                     </div>
