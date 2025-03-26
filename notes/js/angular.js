@@ -855,8 +855,18 @@ app.controller('angular_controller', function($scope, $http, $timeout, $sce) {
                     if(response.data.status > 0) {
                         
                         $scope.fetch_notes($scope.default_note_stat);
+                        
+                        
+                        // for desktop
                         $scope.show_create_note_block = true;
                         $scope.show_view_note_block = false;
+
+
+                        // for mobile
+                        $scope.note_headers = true;
+                        $scope.edit_note_mobile = false;
+        
+        
     
                         Swal.fire({
                             toast: true,

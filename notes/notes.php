@@ -180,6 +180,7 @@ if(isset($_GET['logout'])) {
 
                         <!-- note heads for desktop -->
                         <div class="d-none d-lg-block" >
+
                         
                             <!-- search for a note -->
                             <div class="my-3">
@@ -396,10 +397,17 @@ if(isset($_GET['logout'])) {
                                     <p class="text-secondary m-0">Modified on <span class="text-info">{{update_last_mod | date:'MMM dd, yyyy HH:mm a'}}</span></p>
                     
                                     <!-- tools -->
-                                    <div class="d-flex align-items-center justify-content-end mt-3">
-                                        <button data-bs-toggle="tooltip" title="Star this note" data-bs-placement="top" ng-click="updatenote_starred()" class="btn  btn-link link-warning"><i ng-class="{'bi-star-fill': update_starred === 'true', 'bi-star': update_starred !== 'true'}" class="bi "></i></button>
-                                        <button ng-hide="update_archived == 'archived'" ng-click="archive_note()" data-bs-toggle="tooltip" title="Archive this note" data-bs-placement="top" class="btn  btn-link link-info"><i class="bi bi-archive-fill"></i></button>
-                                        <button ng-click="unarchive_note()" ng-show="update_archived == 'archived'" data-bs-toggle="tooltip" title="Unarchive" data-bs-placement="top" class="btn  btn-link link-success text-decoration-none"><i class="bi bi-archive"></i></button>
+                                    <div class="d-flex align-items-center mt-4">
+                                        
+                                        <button ng-click="update_note_mobile()" class="btn btn-link link-success fs-4"><i class="bi bi-check2"></i></i></button>
+                                        
+                                        <div class="ms-auto">
+                                            <button ng-click="delete_note()" class="btn btn-link link-danger"><i class="bi bi-x-circle-fill"></i></button>
+                                            <button data-bs-toggle="tooltip" title="Star this note" data-bs-placement="top" ng-click="updatenote_starred()" class="btn  btn-link link-warning"><i ng-class="{'bi-star-fill': update_starred === 'true', 'bi-star': update_starred !== 'true'}" class="bi "></i></button>
+                                            <button ng-hide="update_archived == 'archived'" ng-click="archive_note()" data-bs-toggle="tooltip" title="Archive this note" data-bs-placement="top" class="btn  btn-link link-info"><i class="bi bi-archive-fill"></i></button>
+                                            <button ng-click="unarchive_note()" ng-show="update_archived == 'archived'" data-bs-toggle="tooltip" title="Unarchive" data-bs-placement="top" class="btn  btn-link link-success text-decoration-none"><i class="bi bi-archive"></i></button>
+                                        </div>
+                                        
                                     </div>
                     
 
@@ -408,11 +416,6 @@ if(isset($_GET['logout'])) {
                                         <div id="editor-view-note-mobile"  style="max-height: 400px; width: 100%; overflow-y: scroll;"></div>                        
                                     </div>                    
                     
-
-                                    <div class="mt-3 text-end">
-                                        <button ng-click="update_note_mobile()" class="btn btn-sm btn-info">Save <i class="bi bi-arrow-right"></i></button>
-                                    </div>
-                
                     
                                 </div>                                
 
@@ -462,8 +465,14 @@ if(isset($_GET['logout'])) {
                 
 
                                     <!-- note star -->
-                                    <div class="d-flex align-items-center justify-content-end">
+                                    <div class="d-flex align-items-center mt-3">
+                                        
+                                        
                                         <button data-bs-toggle="tooltip" title="Star this note" data-bs-placement="top"  ng-click="star_note()" class="btn  btn-link link-warning fs-3"><i ng-class="{'bi-star-fill' : createnote_starred, 'bi-star' : !createnote_starred}" class="bi"></i></button>                            
+                                        <div class="ms-auto">
+                                            <button ng-click="create_new_note_mobile()" class="btn btn-link link-info text-decoration-none">Create <i class="bi bi-arrow-right"></i></button>
+                                        </div>
+                                        
                                     </div>
                 
                                     <!-- quill text editor -->
@@ -471,10 +480,6 @@ if(isset($_GET['logout'])) {
                                         <div id="editor-create-note-mobile" style="height: 300px; overflow-y: scroll;"></div>                        
                                     </div>                    
                 
-                                    <div class="text-end mt-2">
-                                        <button ng-click="create_new_note_mobile()" class="btn btn-link link-info text-decoration-none">Create <i class="bi bi-arrow-right"></i></button>
-                                    </div>
-
 
                                 </div>
 
