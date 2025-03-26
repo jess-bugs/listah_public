@@ -828,8 +828,8 @@ app.controller('angular_controller', function($scope, $http, $timeout, $sce) {
         
         
         Swal.fire({
-            title: 'Permanent Delete',
-            html: "Do you want to permanently delete this note?",
+            title: $scope.update_title,
+            html: "Do you want to <span class='fw-bold'>permanently</span> delete this note?",
             icon: 'danger',
             confirmButtonColor: "#36bcba",
             cancelButtonColor: "red",
@@ -838,25 +838,57 @@ app.controller('angular_controller', function($scope, $http, $timeout, $sce) {
             cancelButtonText: 'Cancel'
         }).then((result) => {
             
-            $http({
-                method: 'POST',
-                url: "api/archive_note.php",
-                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-                data: $.param({ 
-                    note_id : $scope.current_note_id,                        
+
+
+            if(result.isConfirmed) {
+                $http({
+                    method: 'POST',
+                    url: "api/delete_note.php",
+                    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                    data: $.param({ 
+                        note_id : $scope.current_note_id,                        
+                        
+                    })
                     
-                })
+                }).then(function (response) {
+                    
+                    if(response.data.status > 0) {
+                        
+                        $scope.fetch_notes($scope.default_note_stat);
+                        $scope.show_create_note_block = true;
+                        $scope.show_view_note_block = false;
+    
+                        Swal.fire({
+                            toast: true,
+                            position: 'top-end',
+                            icon: 'success',
+                            title: 'Note Deleted!',
+                            showConfirmButton: false,
+                            showCancelButton: false,
+                            timer: 2000,
+                            timerProgressBar: false
+                        });
+    
+                    } else {
+                        
+                        Swal.fire({
+                            title: 'Error',
+                            html:response.data.message ,
+                            icon: 'error',
+                            confirmButtonText: 'OK'
+                        });
+                        
+                    }                            
+                    
+                } , function (error) {
+                    
+                    // handle error
+                    
+                });;
                 
-            }).then(function (response) {
-                
-                
-                
-                
-            } , function (error) {
-                
-                // handle error
-                
-            });;
+
+            }
+
             
         });
         
