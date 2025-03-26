@@ -59,6 +59,10 @@ if(isset($_GET['logout'])) {
     <script src="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     
+
+    <!-- lottie js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lottie-web/5.12.2/lottie.min.js"></script>
+    
     <style>
         @media screen and (max-width: 991px) {
             .sidebar {
@@ -306,6 +310,11 @@ if(isset($_GET['logout'])) {
                             
                             
                             
+                            <div class="mt-2" ng-show="loading_anim">
+                                <div id="loading-note" style="height: 200px;"></div>
+                                <p style="font-size: 14px;" class="m-0 text-center text-secondary">fetching your note...</p>
+                            </div>
+
                             
                             <!-- MOBILE - notecard -->
                             <!-- data-bs-toggle="modal" data-bs-target="#update-note-modal" -->
@@ -351,6 +360,9 @@ if(isset($_GET['logout'])) {
                             </a>
 
 
+
+
+                            
 
 
 
@@ -696,6 +708,7 @@ if(isset($_GET['logout'])) {
     
     <script src="js/angular.js"></script> 
     <script src="js/jquery.js"></script> 
+    <script src="js/lotties.js"></script> 
     
     
     <script>

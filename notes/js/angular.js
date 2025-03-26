@@ -796,6 +796,7 @@ app.controller('angular_controller', function($scope, $http, $timeout, $sce) {
     // for mobile viewing, updating, and creating
     $scope.note_headers = true;
     $scope.edit_note_mobile = false;
+    $scope.loading_anim = false;
     
     $scope.show_edit_note_mobile = function() {
         
