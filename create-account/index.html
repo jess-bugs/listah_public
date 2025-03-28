@@ -32,6 +32,10 @@
     <link href="https://fonts.googleapis.com/css2?family=Lobster&display=swap" rel="stylesheet">
     
     
+
+    <!-- lottie js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lottie-web/5.12.2/lottie.min.js"></script>
+    
     
     
     
@@ -50,8 +54,8 @@
         body {
             background-color: #191b1d;
         }
-
-
+        
+        
         [ng-cloak] {
             display: none !important;
         }
@@ -71,7 +75,7 @@
             
             
             
-            <form novalidate ng-submit="form_submit()" style="background-color: #141414; height: 90vh; overflow-y: scroll;" class="p-2 rounded col-12 col-lg-6 col-xl-5 mx-auto text-center shadow d-flex flex-column">
+            <div style="background-color: #141414; height: 90vh; overflow-y: scroll;" class="p-2 rounded col-12 col-lg-6 col-xl-5 mx-auto text-center shadow d-flex flex-column">
                 
                 <h3 class="text-white display-4">Create Account</h3>
                 
@@ -96,8 +100,13 @@
                     </div>
                     
                     <p class="text-start">
-                        <small ng-class="{'text-danger' : !login_success, 'text-success' : login_success}" class="text-start">This username already exists.</small>
+                        <small ng-class="{'text-danger' : !login_success, 'text-success' : login_success}" class="text-start">{{error_message}}</small>
                     </p>
+                    
+                    <!-- submit button -->
+                    <div class="mb-3 mt-5 text-center d-flex">
+                        <button ng-click="submit_unique_name()" class="ms-auto btn btn-link link-light text-decoration-none">Next <i class="bi bi-arrow-right"></i></button>                    
+                    </div>
                     
                 </div>
                 
@@ -121,7 +130,7 @@
                         </span>
                         
                         
-                        <input value="johndoe" style="border: 1px solid #36bcba;" type="text" class="form-control text-secondary bg-dark" aria-label="Username" aria-describedby="basic-addon1" disabled>
+                        <input ng-model="unique_username" style="border: 1px solid #36bcba;" type="text" class="form-control text-secondary bg-dark" aria-label="Username" aria-describedby="basic-addon1" disabled>
                     </div>
                     
                     
@@ -132,8 +141,14 @@
                             <i class="bi bi-person-circle"></i>
                         </span>
                         
+                        <input ng-model="reg_password" style="border: 1px solid #36bcba; color: #36bcba;" type="{{password_field_type}}" class="form-control bg-dark" aria-label="Username" aria-describedby="basic-addon1" required>
                         
-                        <input style="border: 1px solid #36bcba; color: #36bcba;" type="text" class="form-control bg-dark" aria-label="Username" aria-describedby="basic-addon1" required>
+                        <span style="border: 1px solid #36bcba;" class="input-group-text bg-dark text-white" id="basic-addon1">
+                            <a ng-click="show_password()" href="javascript:;" class="link link-light">
+                                <i ng-class="{'bi-eye-slash-fill': !password_show, 'bi-eye-fill': password_show}" class="bi"></i>
+                            </a>
+                        </span>
+                        
                     </div>
                     
                     
@@ -145,7 +160,7 @@
                         </span>
                         
                         
-                        <input ng-model="login_username" style="border: 1px solid #36bcba; color: #36bcba;" type="text" class="form-control bg-dark" aria-label="Username" aria-describedby="basic-addon1" required>
+                        <input ng-model="reg_fname" style="border: 1px solid #36bcba; color: #36bcba;" type="text" class="form-control bg-dark" aria-label="Username" aria-describedby="basic-addon1" required>
                     </div>
                     
                     
@@ -157,45 +172,113 @@
                         </span>
                         
                         
-                        <input ng-model="login_username" style="border: 1px solid #36bcba; color: #36bcba;" type="text" class="form-control bg-dark" aria-label="Username" aria-describedby="basic-addon1" required>
+                        <input ng-model="reg_lname" style="border: 1px solid #36bcba; color: #36bcba;" type="text" class="form-control bg-dark" aria-label="Username" aria-describedby="basic-addon1" required>
                     </div>
                     
                     
                     
-                    <p class="text-start d-none">
-                        <small ng-class="{'text-danger' : !login_success, 'text-success' : login_success}" class="text-start">error message</small>
+                    
+                    <!-- gender -->
+                    <p class="m-0 text-secondary text-start">Gender</p>
+                    <div class="input-group mb-3">
+                        <span class="input-group-text" id="basic-addon1">
+                            <i class="bi bi-person-circle"></i>
+                        </span>
+                        
+                        
+                        <!-- <input  style="border: 1px solid #36bcba; color: #36bcba;" type="text" class="form-control bg-dark" aria-label="Username" aria-describedby="basic-addon1" required> -->
+                        
+                        <select ng-model="reg_gender" style="border: 1px solid #36bcba;" class="form-control bg-dark text-white" aria-label="Default select example">
+                            <option selected disabled> -- Select --</option>
+                            <option value="Male">Male</option>
+                            <option value="Female">Female</option>
+                        </select>
+                    </div>
+                    
+                    
+                    
+                    <p class="text-start">
+                        <small ng-class="{'text-danger' : !login_success, 'text-success' : login_success}" class="text-start text-danger">{{error_message}}</small>
                     </p>
+                    
+                    
+                    <!-- submit button -->
+                    <div class="mb-3 mt-5 text-center d-flex">
+                        <button ng-click="unique_name_block = true; user_details_block = false; profile_pic_block = false; error_message = '';" class="btn btn-link link-light text-decoration-none"><i class="bi bi-arrow-left"></i> Go back</button>                    
+                        <button ng-click="submit_personal_info()" type="button" class="ms-auto btn btn-link link-light text-decoration-none">Next <i class="bi bi-arrow-right"></i></button>                    
+                    </div>
                     
                 </div>
                 
                 
                 
-
-
                 
-
+                
+                
+                
                 <!-- ******** BLOCK - profile picture uploaded -->
                 <div ng-cloak ng-show="profile_pic_block" class="col-md-8 mx-auto mt-3 ">
-                
+                    
+                    
+                    <p class="text-secondary"><span class="text-white">You're almost done!</span> <br>Upload your picture to make your profile look better</p>
+                    
+                    <img ng-show="!show_lottie_gender" class="border border-info reg_profile_image" style="width: 200px; height: 200px; border-radius: 50%; object-fit: cover;" alt="grunkle-stan">
+                    
 
-                    <p class="text-secondary">Upload your profile picture</p>
+                    <!-- boy icon for male -->
+                    <div ng-show="reg_gender == 'Male' && show_lottie_gender" id="boy-icon" style="height: 200px;"></div>
 
-                    <img class="border border-info" style="width: 200px; height: 200px; border-radius: 50%; object-fit: cover;" src="https://www.jessbaggs.com/images/Grunkle Stan.png" alt="grunkle-stan">
+                    <!-- girl icon for female -->
+                    <div ng-show="reg_gender == 'Female' && show_lottie_gender" id="girl-icon" style="height: 200px;"></div>
+
                     <p class="text-center mt-3">
-                        <button class="btn btn-link link-info">Upload Profile</button>
+                        <button ng-disabled="upload_later" ng-click="upload_profile_pic()" class="btn btn-link link-info">Upload Profile</button>
                     </p>
-                
+
+
+                    <!-- do it later - under debugging -->
+                    <p style="font-size: 13px;" class="text-white d-none">
+                        <input ng-model="upload_later" class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+                        Do it later
+                    </p>
+                    
+                    <input class="d-none" id="user-img-fileinput" type="file" accept=".png, .jpg, .jpeg, .gif">
+                    
+                    <p class="text-start">
+                        <small ng-class="{'text-danger' : !login_success, 'text-success' : login_success}" class="text-start text-danger">{{error_message}}</small>
+                    </p>
+                    
+                    
+                    <!-- submit button -->
+                    <div class="mb-3 mt-5 text-center d-flex">
+                        <button ng-click="unique_name_block = false; user_details_block = true; profile_pic_block = false; error_message = '';" class="btn btn-link link-light text-decoration-none"><i class="bi bi-arrow-left"></i> Go back</button>                    
+                        <button type="button" class="ms-auto btn btn-sm btn-info">Finish <i class="bi bi-arrow-right"></i></button>                    
+                    </div>
+                    
+                    
                 </div>
                 
                 
-                
-                
-                
-                <!-- submit button -->
-                <div class="col-xl-8 mx-auto mb-3 mt-5 text-center d-flex">
-                    <button type="submit" class="btn btn-link link-light text-decoration-none"><i class="bi bi-arrow-left"></i> Go back</button>                    
-                    <button type="submit" class="ms-auto btn btn-link link-light text-decoration-none">Next <i class="bi bi-arrow-right"></i></button>                    
+
+                <!-- ******** BLOCK - preview details -->
+                <div ng-cloak ng-show="preview_details_block" class="col-md-8 mx-auto mt-3 ">
+
+                    <h3 class="text-white display-4 text-start">Preview Details</h3>
+                    <img class="border border-info reg_profile_image" style="width: 150px; height: 150px; border-radius: 50%; object-fit: cover;" alt="grunkle-stan">
+
+                    <!-- submit button -->
+                    <div class="mb-3 mt-5 text-center d-flex">
+                        <button ng-click="profile_pic_block = true; preview_details_block = false;" class="btn btn-link link-light text-decoration-none"><i class="bi bi-arrow-left"></i> Go back</button>                    
+                        <button type="button" class="ms-auto btn btn-link link-light text-decoration-none">Next <i class="bi bi-arrow-right"></i></button>                    
+                    </div>
+                    
+
+
                 </div>
+
+                
+                
+                
                 
                 <hr class="text-secondary mt-auto">
                 
@@ -204,7 +287,7 @@
                     A Jess Baggs Production <span style="font-size: 12px;"><i class="bi bi-circle-fill"></i> 2025</span>
                 </div>
                 
-            </form>        
+            </div>        
             
         </div>
     </div>
@@ -214,6 +297,7 @@
     
     
     <script src="js/angular.js"></script> 
+    <script src="js/lotties.js"></script> 
 </body>
 
 
