@@ -76,6 +76,17 @@ if(isset($_GET['logout'])) {
         }
         
         
+
+        .active-tab {
+
+            background-color: #1a1f1f;
+            border-right: 3px solid #36bcba;
+        }
+
+        .active-tab:hover {
+            background-color: transparent;
+            border-right: 3px solid #36bcba; /* Makes the border invisible */
+        }
     </style>
     
 </head>
@@ -91,40 +102,22 @@ if(isset($_GET['logout'])) {
                 </a>
                 
                 
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
+                <button class="btn btn-sm btn-light " type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent">
+                    <!-- <span class="navbar-toggler-icon"></span> -->
+                    <img style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover;" src="https://www.jessbaggs.com/images/me.jpg" alt="">                            
                 </button>
                 
 
                 <!-- logout -->
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                        
                         <li class="nav-item">
                             <button ng-click="logout()" class="btn btn-link link-danger text-decoration-none"><i class="bi bi-power text-danger" ></i> Logout</button>
-                        </li>                
-                        
-                        
+                        </li>                                                            
                     </ul>                    
                 </div>
-                
-                
-                <div class="d-none">
-                    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                            <li class="nav-item">
-                                <button ng-class="{'active_btn': active_btn, 'link-secondary': !active_btn}" ng-click="active_btn = true; archive_btn = false; starred_btn = false; note_fetcher('active')" class="btn btn-link text-decoration-none"><i class="bi bi-circle text-success" ></i> Active</button>
-                            </li>
-                            
-                            <li class="nav-item">
-                                <button ng-class="{'active_btn': archive_btn, 'link-secondary': !archive_btn}" ng-click="active_btn = false; archive_btn = true; starred_btn = false; note_fetcher('archived')" class="btn btn-link text-decoration-none link-secondary"><i class="bi bi-archive-fill"></i> Archived</button>
-                            </li>
-                            
-                            <li class="nav-item">
-                                <button ng-class="{'active_btn': starred_btn, 'link-secondary': !starred_btn}" ng-click="active_btn = false; archive_btn = false; starred_btn = true; fetch_all_starred()" class="btn btn-link link-secondary text-decoration-none"><i class="bi bi-star-fill text-warning"></i> Starred</button>
-                            </li>                        
-                        </ul>                    
-                    </div>
-                </div>
+
                 
             </div>
         </nav>
@@ -140,21 +133,22 @@ if(isset($_GET['logout'])) {
         <!-- normal / priority -->
         <div class="mt-4 d-flex flex-column  justify-content-between rounded p-2" style="background-color: #111315;">
             <div class="">                
-                <button ng-class="{'active_btn': active_btn, 'link-secondary': !active_btn}" ng-click="active_btn = true; archive_btn = false; starred_btn = false; note_fetcher('active')" class="btn btn-link text-decoration-none"><i class="bi bi-circle text-success" ></i> Active</button>
-                <!-- ng-class="{'active_btn': default_note_stat === 'active', 'link-secondary': default_note_stat !== 'active'}" -->
+                <button ng-class="{'active_btn': active_btn, 'link-secondary': !active_btn}" ng-click="active_btn = true; archive_btn = false; starred_btn = false; note_fetcher('active')" class="btn btn-link text-decoration-none"><i class="bi bi-circle text-success" ></i> Active</button>                
             </div>
             
             <div class="">                
                 <button ng-class="{'active_btn': archive_btn, 'link-secondary': !archive_btn}" ng-click="active_btn = false; archive_btn = true; starred_btn = false; note_fetcher('archived')" class="btn btn-link text-decoration-none link-secondary"><i class="bi bi-archive-fill"></i> Archived</button>
-                <!-- ng-class="{'active_btn': default_note_stat === 'archived', 'link-secondary': default_note_stat !== 'archived'}" -->
             </div>
             
             <div class="">
-                <button ng-class="{'active_btn': starred_btn, 'link-secondary': !starred_btn}" ng-click="active_btn = false; archive_btn = false; starred_btn = true; fetch_all_starred()" class="btn btn-link link-secondary text-decoration-none"><i class="bi bi-star-fill text-warning"></i> Starred</button>
-                
+                <button ng-class="{'active_btn': starred_btn, 'link-secondary': !starred_btn}" ng-click="active_btn = false; archive_btn = false; starred_btn = true; fetch_all_starred()" class="btn btn-link link-secondary text-decoration-none"><i class="bi bi-star-fill text-warning"></i> Starred</button>                
             </div>
         </div>
         
+
+        <div class="mt-auto d-grid">
+            <button ng-click="logout()" class="btn btn-sm btn-outline-danger"><i class="bi bi-power text-danger" ></i> Logout</button>
+        </div>
         
         
     </div>    
@@ -204,7 +198,7 @@ if(isset($_GET['logout'])) {
                             <!-- create a note -->
                             <div class="mb-4 d-grid">
                                 <!-- for lg -->
-                                <button ng-click="show_view_note_block = false; show_create_note_block = true;" class="btn text-white d-none d-lg-block" style="background-color: #36bcba;"><i class="bi bi-plus-circle-dotted"></i> Create New</button>
+                                <button ng-click="show_view_note_block = false; show_changepass_block = false; show_profile_block = false; show_create_note_block = true;" class="btn text-white d-none d-lg-block" style="background-color: #36bcba;"><i class="bi bi-plus-circle-dotted"></i> Create New</button>
                                 
                                 <!-- for mobile -->
                                 <!-- data-bs-toggle="modal" data-bs-target="#create-note-modal" -->
@@ -539,19 +533,90 @@ if(isset($_GET['logout'])) {
             <div class="col-lg-7 col-xl-8 col-xxl-9 d-none d-lg-block p-1" >
                 <div class="rounded-2 p-2" style="min-height: 100vh; background-color: #26282a;">
                     
-                    <!-- BLOCK - creating note -->
-                    <div id="create-note" ng-show="show_create_note_block">
-                        <!-- header for content -->
-                        <div class="mb-3 d-flex p-1 rounded-2" >                
-                            <div class="me-auto">
-                                <p class="text-white d-none">Last logged: Feb 31, 2025</p>
-                            </div>
-                            
-                            <div class="ms-auto me-2 d-inline">                                                                
-                                <button ng-click="logout()" class="btn btn-link link-danger border border-danger"><i class="bi bi-power text-danger"></i></button>
-                            </div>                                
+
+                    <!-- header for content -->
+                    <div class="d-flex p-1 rounded-2" >                
+                        <div class="me-auto">
+                            <p class="text-white">Hi there, <span class="fw-bold">Jess Baggs...</span></p>
                         </div>
                         
+                        <div class="ms-auto me-2 d-inline">                                                                
+                            <!-- <button ng-click="logout()" class="btn btn-link link-danger border border-danger"><i class="bi bi-power text-danger"></i></button> -->                                
+                            
+                            <!-- profile pic with dropdown -->
+                            <div class="input-group mb-3 dropstart">
+
+                                <!-- data-bs-toggle="dropdown" aria-expanded="false" -->
+                                <button ng-click="see_profile()" class="btn btn-link link-secondary" >
+                                    <img style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover;" src="https://www.jessbaggs.com/images/me.jpg" alt="">                            
+                                </button>
+                                
+                                <button type="button" class="btn btn-outline-secondary dropdown-toggle dropdown-toggle-split d-none" data-bs-toggle="dropdown" aria-expanded="false">
+                                    <span class="visually-hidden">Toggle Dropdown</span>
+                                </button>
+
+                                <ul class="dropdown-menu dropdown-menu-dark">
+                                    <li><button ng-click="see_profile()" class="btn btn-link link-light dropdown-item">Profile</button></li>
+                                    <li><hr class="dropdown-divider"></li>
+                                    <li><button ng-click="changepass_block()" class="btn btn-link link-light dropdown-item">Change Password</button></li>
+                                </ul>
+                                
+                            </div>                                
+                            
+                        </div>                                
+                    </div>
+                        
+
+
+                    <!-- BLOCK - Edit Profile -->
+                    <div ng-show="show_profile_block" class="">
+
+                        <h2 class="fw-bold">Account Management</h2>                    
+
+                        
+                        <div class="mt-3">
+
+                            <div class="row g-0">
+                                <div class="col-xl-2">
+                                    <div class="h-100 border-end border-secondary d-flex flex-column" style="background-color: #191919;">
+
+                                        <a href="javascript:;" ng-click="change_current_tab('overview')" ng-class="{'active-tab' : current_tab == 'overview', 'bg-dark' : current_tab == 'overview', 'link-light' : current_tab == 'overview', 'link-secondary' : current_tab !== 'overview'}" style="border-radius: 0%;" class="btn btn-link  text-decoration-none text-start"><i class="bi bi-person-circle  me-2"></i> General Info</a>
+                                        <a href="javascript:;" ng-click="change_current_tab('edit-profile')" ng-class="{'active-tab' : current_tab == 'edit-profile', 'bg-dark' : current_tab == 'edit-profile', 'link-light' : current_tab == 'edit-profile', 'link-secondary' : current_tab !== 'edit-profile' }" style="border-radius: 0%;" class="btn btn-link text-decoration-none text-start"><i class="bi bi-pencil-square  me-2"></i> Edit Profile</a>
+                                        <a href="javascript:;" ng-click="change_current_tab('change-password')" ng-class="{'active-tab' : current_tab == 'change-password', 'bg-dark' : current_tab == 'change-password', 'link-light' : current_tab == 'change-password', 'link-secondary' : current_tab !== 'change-password' }" style="border-radius: 0%;" class="btn btn-link text-decoration-none text-start"><i class="bi bi-shield-exclamation   me-2"></i> Change Password</a>
+
+                                    </div>
+                                </div>
+
+                                <div class="col-xl-10">
+                                    <div class="h-100" style="background-color: #1a1f1f;">
+
+                                        <div class="p-1" style="height: 450px;">
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- BLOCK - Change Password -->
+                    <div ng-show="show_changepass_block">
+
+                        <h2 class="fw-bold">Change Password</h2>                    
+
+                    </div>
+
+
+
+                    <!-- BLOCK - creating note -->
+                    <div id="create-note" ng-show="show_create_note_block">
+                        
+
+                        
+
                         
                         <h3 class="fw-bold" style="color: #36bcba;">Create a Note</h3>
                         
@@ -602,18 +667,6 @@ if(isset($_GET['logout'])) {
                     
                     <!-- BLOCK - viewng and updating note -->
                     <div id="view-note" ng-show="show_view_note_block">
-                        
-                        <!-- header for content -->
-                        <div class="mb-3 d-flex p-1 rounded-2" >                
-                            <div class="me-auto">
-                                <p class="text-white d-none">Last logged: Feb 31, 2025</p>
-                            </div>
-                            
-                            <div class="ms-auto me-2 d-inline">                                                                
-                                <button ng-click="logout()" class="btn btn-link link-danger border border-danger"><i class="bi bi-power text-danger"></i></button>
-                            </div>                                
-                        </div>
-                        
                         
                         <div class="my-3" ng-repeat="error in error_messages">
                             <p class="text-danger">Error: {{error}}</p>

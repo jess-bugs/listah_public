@@ -25,13 +25,13 @@ app.controller('angular_controller', function($scope, $http, $timeout, $sce) {
     
     
     $scope.createnote_starred = false;
-    $scope.createnote_err_message = "";
-    $scope.show_create_note_block = true;
+    $scope.createnote_err_message = "";    
+    $scope.show_create_note_block = false;
     $scope.show_view_note_block = false;
     $scope.current_note_id;
     
-    $scope.show_title_edit = false;
     
+    $scope.show_title_edit = false;
     $scope.currentDate = new Date();
     $scope.default_note_stat = 'active';
     
@@ -43,6 +43,10 @@ app.controller('angular_controller', function($scope, $http, $timeout, $sce) {
     
     
     
+    $scope.show_profile_block = true;
+    $scope.show_changepass_block = false;
+
+
     // tools for quill JS
     const toolbarOptions = [
         ['bold', 'italic', 'underline', 'strike'],        // toggled buttons
@@ -272,6 +276,8 @@ app.controller('angular_controller', function($scope, $http, $timeout, $sce) {
         $scope.show_create_note_block = false;
         $scope.show_view_note_block = true;
         $scope.current_note_id = note_id;
+        $scope.show_profile_block =  false;
+        $scope.show_changepass_block = false;
         
         
         $http({
@@ -925,4 +931,45 @@ app.controller('angular_controller', function($scope, $http, $timeout, $sce) {
     }
     
     
+
+
+
+
+    // show profile block
+    $scope.see_profile = function() {
+
+        
+        $scope.show_changepass_block = false;
+        $scope.show_create_note_block = false;
+        $scope.show_view_note_block = false;
+        
+        $scope.show_profile_block = true;
+
+
+    }
+
+
+
+
+    // change password block
+    $scope.changepass_block = function() {
+
+        $scope.show_profile_block = false;
+        $scope.show_create_note_block = false;
+        $scope.show_view_note_block = false;
+                
+        $scope.show_changepass_block = true;
+
+    }
+
+
+
+
+    $scope.current_tab = "overview";
+
+    $scope.change_current_tab = function(tab) {
+
+        $scope.current_tab = tab;
+    }
+
 });
