@@ -783,7 +783,10 @@ app.controller('angular_controller', function($scope, $http, $timeout, $sce) {
                     showConfirmButton: false,
                     showCancelButton: false,
                     timer: 2000,
-                    timerProgressBar: true
+                    timerProgressBar: true,
+                    allowOutsideClick: false,
+                    allowEscapeKey: false,
+                    allowEnterKey: false 
                 });
                 
                 $timeout(function() {                                        

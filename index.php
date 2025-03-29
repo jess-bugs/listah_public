@@ -108,6 +108,10 @@ if(isset($_SESSION['user_logged_in'])) {
 
                 <div class="col-xl-8 mx-auto mb-3 text-center">
                     <button style="border: 1px solid #36bcba;" type="submit" class="btn btn-outline-dark text-white">Login</button>                    
+                    
+                    <p class="mt-3">
+                        <a href="/listah/create-account/" style="font-size: 14px;" class="link link-secondary">Create Account</a>  
+                    </p>
                 </div>
             
                 <hr class="text-secondary mt-4">
