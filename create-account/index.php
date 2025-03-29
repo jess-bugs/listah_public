@@ -178,7 +178,7 @@ if(isset($_SESSION['user_logged_in'])) {
                         
                         
                         <!-- style="border: 1px solid #36bcba; color: #36bcba;" -->
-                        <input ng-model="reg_fname" style="color: #36bcba;" ng-style="{'border' : reg_fname.length <= 5 ? '1px solid red' : '1 px solid #36bcba'}" type="text" class="form-control bg-dark" aria-label="Username" aria-describedby="basic-addon1" required>
+                        <input ng-model="reg_fname" style="color: #36bcba;" ng-style="{'border' : reg_fname.length <= 1 ? '1px solid red' : '1 px solid #36bcba'}" type="text" class="form-control bg-dark" aria-label="Username" aria-describedby="basic-addon1" required>
                     </div>
                     
                     
@@ -190,7 +190,7 @@ if(isset($_SESSION['user_logged_in'])) {
                         </span>
                         
                         
-                        <input ng-model="reg_lname" ng-style="{'border' : reg_lname.length <= 5 ? '1px solid red' : '1 px solid #36bcba'}" style="color: #36bcba;" type="text" class="form-control bg-dark" aria-label="Username" aria-describedby="basic-addon1" required>
+                        <input ng-model="reg_lname" ng-style="{'border' : reg_lname.length <= 1 ? '1px solid red' : '1 px solid #36bcba'}" style="color: #36bcba;" type="text" class="form-control bg-dark" aria-label="Username" aria-describedby="basic-addon1" required>
                     </div>
                     
                     

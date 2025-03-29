@@ -109,7 +109,7 @@ app.controller('angular_controller', function($scope, $http, $timeout) {
             $scope.error_message = "Password must be at least 6 characters.";
 
         
-        } else if($scope.reg_fname.length <= 5 || $scope.reg_lname.length <= 5) {
+        } else if($scope.reg_fname.length <= 1 || $scope.reg_lname.length <= 1) {
             
             $scope.error_message = "First name and last name must be at least 6 characters.";
 
