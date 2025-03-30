@@ -26,7 +26,7 @@ app.controller('angular_controller', function($scope, $http, $timeout, $sce) {
     
     $scope.createnote_starred = false;
     $scope.createnote_err_message = "";    
-    $scope.show_create_note_block = false;
+    $scope.show_create_note_block = true;
     $scope.show_view_note_block = false;
     $scope.current_note_id;
     
@@ -43,7 +43,7 @@ app.controller('angular_controller', function($scope, $http, $timeout, $sce) {
     
     
     
-    $scope.show_profile_block = true;
+    $scope.show_profile_block = false;
     $scope.show_changepass_block = false;
 
 
@@ -965,11 +965,23 @@ app.controller('angular_controller', function($scope, $http, $timeout, $sce) {
 
 
 
-    $scope.current_tab = "overview";
+    $scope.current_tab = "geninfo";
 
     $scope.change_current_tab = function(tab) {
 
         $scope.current_tab = tab;
     }
+
+
+
+
+
+
+
+
+
+
+
+
 
 });

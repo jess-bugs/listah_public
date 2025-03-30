@@ -548,7 +548,7 @@ if(isset($_GET['logout'])) {
 
                                 <!-- data-bs-toggle="dropdown" aria-expanded="false" -->
                                 <button ng-click="see_profile()" class="btn btn-link link-secondary" >
-                                    <img style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover;" src="https://www.jessbaggs.com/images/me.jpg" alt="">                            
+                                    <img style="width: 40px; height: 40px; border: 1px solid #36bcba; border-radius: 50%; object-fit: cover;" src="https://www.jessbaggs.com/res/images/avatars/avatar1.png" alt="">                            
                                 </button>
                                 
                                 <button type="button" class="btn btn-outline-secondary dropdown-toggle dropdown-toggle-split d-none" data-bs-toggle="dropdown" aria-expanded="false">
@@ -569,7 +569,7 @@ if(isset($_GET['logout'])) {
 
 
                     <!-- BLOCK - Edit Profile -->
-                    <div ng-show="show_profile_block" class="">
+                    <div ng-show="show_profile_block" style="height: 100%;">
 
                         <h2 class="fw-bold">Account Management</h2>                    
 
@@ -577,22 +577,169 @@ if(isset($_GET['logout'])) {
                         <div class="mt-3">
 
                             <div class="row g-0">
-                                <div class="col-xl-2">
+                                <div class="col-lg-4 col-xl-4 col-xxl-2">
                                     <div class="h-100 border-end border-secondary d-flex flex-column" style="background-color: #191919;">
 
-                                        <a href="javascript:;" ng-click="change_current_tab('overview')" ng-class="{'active-tab' : current_tab == 'overview', 'bg-dark' : current_tab == 'overview', 'link-light' : current_tab == 'overview', 'link-secondary' : current_tab !== 'overview'}" style="border-radius: 0%;" class="btn btn-link  text-decoration-none text-start"><i class="bi bi-person-circle  me-2"></i> General Info</a>
+                                        <a href="javascript:;" ng-click="change_current_tab('geninfo')" ng-class="{'active-tab' : current_tab == 'geninfo', 'bg-dark' : current_tab == 'geninfo', 'link-light' : current_tab == 'geninfo', 'link-secondary' : current_tab !== 'geninfo'}" style="border-radius: 0%;" class="btn btn-link  text-decoration-none text-start"><i class="bi bi-person-circle  me-2"></i> General Info</a>
                                         <a href="javascript:;" ng-click="change_current_tab('edit-profile')" ng-class="{'active-tab' : current_tab == 'edit-profile', 'bg-dark' : current_tab == 'edit-profile', 'link-light' : current_tab == 'edit-profile', 'link-secondary' : current_tab !== 'edit-profile' }" style="border-radius: 0%;" class="btn btn-link text-decoration-none text-start"><i class="bi bi-pencil-square  me-2"></i> Edit Profile</a>
                                         <a href="javascript:;" ng-click="change_current_tab('change-password')" ng-class="{'active-tab' : current_tab == 'change-password', 'bg-dark' : current_tab == 'change-password', 'link-light' : current_tab == 'change-password', 'link-secondary' : current_tab !== 'change-password' }" style="border-radius: 0%;" class="btn btn-link text-decoration-none text-start"><i class="bi bi-shield-exclamation   me-2"></i> Change Password</a>
 
                                     </div>
                                 </div>
 
-                                <div class="col-xl-10">
-                                    <div class="h-100" style="background-color: #1a1f1f;">
+                                <div class="col-lg-8 col-xl-8 col-xxl-10">
+                                    <div class="h-100" style="background-color: #1a1f1f; min-height: 500px;">
 
-                                        <div class="p-1" style="height: 450px;">
+
+                                        <!-- block - general info -->
+                                        <div ng-show="current_tab == 'geninfo'" class="p-2 d-flex flex-column h-100">
+
+                                            <!-- profile pic -->
+                                            <p>
+                                                <img style="width: 100px; height: 100px; border: 1px solid #36bcba; border-radius: 50%; object-fit: cover;" src="https://www.jessbaggs.com/res/images/avatars/avatar1.png">                            
+                                                <br>
+                                                <button style="font-size: 14px;" class="btn btn-link link-info">
+                                                    <i class="bi bi-camera-fill"></i>
+                                                </button>
+                                            </p>
+                                            
+
+                                            <h2 class="mt-1 fw-bold ">Jess Baggs</h2>
+                                            <p class="mt-2 mb-0">Username:  <span class="text-secondary">jessbugs</span></p>
+                                            <p class="mb-0">Role:  <span class="text-secondary">regular user</span></p>
+                                            <p class="text-secondary m-0">Created on Sep 04, 2025</p>
+
+                                            <div class="mt-auto">
+                                                <button class="btn btn-sm btn-danger">Delete Account</button>
+                                            </div>
 
                                         </div>
+
+
+
+
+                                        <!-- block - Edit Profile -->
+                                        <div ng-show="current_tab == 'edit-profile'" class="p-2 d-flex flex-column h-100">
+
+                                            <h2 class="fw-bold mb-3">Edit Profile</h2>
+                                        
+                                            <!-- first name -->
+                                            <div class="col-xxl-4">
+                                                <p class="m-0 text-secondary text-start">First Name</p>
+                                                <div class="input-group mb-3">
+                                                    <span class="input-group-text" id="basic-addon1">
+                                                        <i class="bi bi-person-circle"></i>
+                                                    </span>
+                                                    
+                                                    
+                                                    <!-- style="border: 1px solid #36bcba; color: #36bcba;" -->
+                                                    <input style="color: #36bcba;" ng-style="{'border' : reg_fname.length <= 1 ? '1px solid red' : '1 px solid #36bcba'}" type="text" class="form-control bg-dark" aria-label="Username" aria-describedby="basic-addon1" required>
+                                                </div>
+                                            </div>
+                                            
+
+                                            <!-- last name -->
+                                            <div class="col-xxl-4">
+                                                <p class="m-0 text-secondary text-start">Last Name</p>
+                                                <div class="input-group mb-3">
+                                                    <span class="input-group-text" id="basic-addon1">
+                                                        <i class="bi bi-person-circle"></i>
+                                                    </span>
+                                                    
+                                                    
+                                                    <!-- style="border: 1px solid #36bcba; color: #36bcba;" -->
+                                                    <input style="color: #36bcba;" ng-style="{'border' : reg_fname.length <= 1 ? '1px solid red' : '1 px solid #36bcba'}" type="text" class="form-control bg-dark" aria-label="Username" aria-describedby="basic-addon1" required>
+                                                </div>
+                                            </div>
+                    
+
+                                           
+                                            <!-- gender -->
+                                            <div class="col-xxl-4">
+                                                <p class="m-0 text-secondary text-start">Gender</p>
+                                                <div class="input-group mb-3">
+                                                    <span class="input-group-text" id="basic-addon1">
+                                                        <i class="bi bi-person-circle"></i>
+                                                    </span>
+                                                                                                    
+                                                    <select style="border: 1px solid #36bcba;" class="form-control bg-dark text-white" aria-label="Default select example">
+                                                        <option value="Male">Male</option>
+                                                        <option value="Female">Female</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+
+
+                                            <div class="mt-auto col-xxl-4 d-grid mb-3">
+                                                <button type="button" class="btn btn-sm" style="background-color: #36bcba;">Save <i class="bi bi-arrow-right"></i></button>                    
+                                            </div>                    
+
+                                        </div>
+
+
+
+                                        <!-- block - change password -->
+                                        <div ng-show="current_tab == 'change-password'" class="p-2 ">
+
+                                            <h2 class="fw-bold mb-3">Change Password</h2>
+
+                                            <!-- current password -->
+                                            <div class="col-xxl-4 ">
+                                                <p class="m-0 text-white text-start">Current Password</p>
+                                                <div class="input-group">
+                                                    <span class="input-group-text" id="basic-addon1">
+                                                        <i class="bi bi-person-circle"></i>
+                                                    </span>
+                                                    
+                                                                                                        
+                                                    <input style="color: #36bcba;" ng-style="{'border' : reg_fname.length <= 1 ? '1px solid red' : '1 px solid #36bcba'}" type="text" class="form-control bg-dark" aria-label="Username" aria-describedby="basic-addon1" required>                                                    
+                                                </div>
+
+                                                <div class="text-end">
+                                                    <button class="btn btn-link link-info text-decoration-none">Next <i class="bi bi-arrow-right"></i></button>
+                                                </div>
+                                                
+                                            </div>
+
+
+                                            <!-- new password -->
+                                            <div class="col-xxl-4 d-none">
+                                                <div class="mb-2">
+                                                    <p class="m-0 text-white text-start">New Password</p>
+                                                    <div class="input-group">
+                                                        <span class="input-group-text" id="basic-addon1">
+                                                            <i class="bi bi-person-circle"></i>
+                                                        </span>
+                                                        
+                                                                                                            
+                                                        <input style="color: #36bcba;" ng-style="{'border' : reg_fname.length <= 1 ? '1px solid red' : '1 px solid #36bcba'}" type="password" class="form-control bg-dark" aria-label="Username" aria-describedby="basic-addon1" required>                                                    
+                                                    </div>                                                    
+                                                </div>                                                
+
+
+                                                <!-- confirm password -->
+                                                <div class="mb-2 mt-4">
+                                                    <p class="m-0 text-white text-start">Confirm Password</p>
+                                                    <div class="input-group">
+                                                        <span class="input-group-text" id="basic-addon1">
+                                                            <i class="bi bi-person-circle"></i>
+                                                        </span>
+                                                        
+                                                                                                            
+                                                        <input style="color: #36bcba;" ng-style="{'border' : reg_fname.length <= 1 ? '1px solid red' : '1 px solid #36bcba'}" type="password" class="form-control bg-dark" aria-label="Username" aria-describedby="basic-addon1" required>                                                    
+                                                    </div>
+
+                                                    <div class="text-end">
+                                                        <button class="btn btn-link link-info text-decoration-none">Change Password <i class="bi bi-arrow-right"></i></button>
+                                                    </div>
+                                                </div>                                                
+                                                
+                                            </div>
+
+                                        </div>
+
+
+
                                     </div>
                                 </div>
                             </div>
