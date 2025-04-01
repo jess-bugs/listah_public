@@ -26,7 +26,7 @@ app.controller('angular_controller', function($scope, $http, $timeout, $filter) 
     
     $scope.createnote_starred = false;
     $scope.createnote_err_message = "";    
-    $scope.show_create_note_block = false;
+    $scope.show_create_note_block = true;
     $scope.show_view_note_block = false;
     $scope.current_note_id;
     
@@ -43,7 +43,7 @@ app.controller('angular_controller', function($scope, $http, $timeout, $filter) 
     
     
     
-    $scope.show_profile_block = true;
+    $scope.show_profile_block = false;
     $scope.show_changepass_block = false;
     
     
@@ -967,6 +967,7 @@ app.controller('angular_controller', function($scope, $http, $timeout, $filter) 
     
     
     // switching active tab
+    // geninfo
     $scope.current_tab = "geninfo";
     
     $scope.change_current_tab = function(tab) {
@@ -987,6 +988,7 @@ app.controller('angular_controller', function($scope, $http, $timeout, $filter) 
     
     
     $scope.usermeta_error = "";
+    $scope.update_info_error = "";
     $scope.enable_edit_prof = false;
     
     // fetch user meta
@@ -1047,6 +1049,77 @@ app.controller('angular_controller', function($scope, $http, $timeout, $filter) 
     // function to update profile
     $scope.update_profile = function() {
         
+        let genders = ['Male', 'Female'];
+        
+        if(!validate_input($scope.update_lname) || !validate_input($scope.update_fname) || !validate_input($scope.update_gender)) {
+            
+            $scope.update_info_error = "Please complete all required fields";
+            
+        } else if($scope.update_lname.length <= 1 || $scope.update_fname.length <= 1) {
+            
+            $scope.update_info_error = "First and last name should be more than 2 characters in length";
+            
+            
+        } else if(!genders.includes($scope.update_gender)) {
+            
+            $scope.update_info_error = "Not a valid gender";
+            
+        } else {
+            
+            
+            $scope.update_info_error = "";
+            
+            $http({
+                method: 'POST',
+                url: "api/update_profile.php",
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                data: $.param({ 
+                    
+                    first_name : $scope.update_fname,
+                    last_name : $scope.update_lname,
+                    gender : $scope.update_gender
+                    
+                })
+                
+            }).then(function (response) {
+                
+                if(response.data.status) {
+                    
+                    Swal.fire({
+                        toast: true,
+                        position: 'top-end',
+                        icon: 'success',
+                        title: 'Changes Saved!',
+                        showConfirmButton: false,
+                        showCancelButton: false,
+                        timer: 1000,
+                        timerProgressBar: false
+                    });
+                    
+                    
+                    // refresh viewing data
+                    $scope.get_user_meta();
+                    
+                    
+                    // disable editing
+                    $scope.enable_edit_prof = false;
+                    
+                } else {
+                    
+                    $scope.update_info_error = "Backend error: " + response.data.message;
+                    
+                }
+                
+            }, function (error) {
+                
+                // handle error
+                $scope.update_info_error = "Didn't reach the backend."
+                
+            });
+            
+            
+            
+        }
         
     }
     
@@ -1108,7 +1181,7 @@ app.controller('angular_controller', function($scope, $http, $timeout, $filter) 
                         let formData = new FormData();                        
                         
                         if (profile_pic_input.files.length > 0) {
-                        
+                            
                             formData.append("profile_image", profile_pic_input.files[0]);
                         } else {
                             
@@ -1126,14 +1199,16 @@ app.controller('angular_controller', function($scope, $http, $timeout, $filter) 
                             
                         }).then(function (response) {
                             
-                            if(response.data.status) {
+                            $scope.usermeta_error = "";
 
+                            if(response.data.status) {
+                                
                                 // console.log(response.data.message);
                                 $scope.get_user_meta();
-
+                                
                             } else {
-
-                            
+                                
+                                
                                 $scope.usermeta_error = "Server Response: " + response.data.message;
                             }
                             
@@ -1163,9 +1238,306 @@ app.controller('angular_controller', function($scope, $http, $timeout, $filter) 
     
     
     
+    
+    
+    
+    
+    
+    
+    
+    
+    /****************************** Change Password ******************************/
+    
+    
+    $scope.changepass_error = "";
+    $scope.show_new_password_block = false;
+    
+    
+    // check current password if correct
+    $scope.check_current_password = function() {
+        
+        if(validate_input($scope.current_password) && $scope.current_password.length >= 7) {
+            
+            
+            $http({
+                method: 'POST',
+                url: "api/change_pass.php",
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                data: $.param({ 
+                    current_pass : $scope.current_password
+                })
+                
+            }).then(function (response) {
+                
+                
+                $scope.changepass_error = "";
+                
+                // password correct
+                if(response.data.status) {
+                    
+                    $scope.show_new_password_block = true;
+                    
+                } else {
+                    
+                    $scope.changepass_error = response.data.message;
+                    
+                }
+                
+                
+            }, function (error) {
+                
+                
+                // handle error
+                $scope.changepass_error = "Didn't reach backend.";
+            });
+            
+            
+            
+        } else {
+            
+            $scope.changepass_error = "Password must be at least 7 characters in length.";
+        }
+        
+    }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    // password is correct, change the current password
+    $scope.change_password = function() {
+        
+        if(!validate_input($scope.new_pass) || !validate_input($scope.confirm_pass)) {
+            
+            $scope.changepass_error = "Please input a valid password.";
+            
+        } else if($scope.new_pass.length <=5) {
+            
+            $scope.changepass_error = "Password must be at least 6 characters.";
+            
+        } else if($scope.new_pass !== $scope.confirm_pass) {
+            
+            $scope.changepass_error = "Passwords did not match.";        
+            
+        } else if($scope.current_password == $scope.new_pass) {
+            
+            $scope.changepass_error = "You cannot use the old password.";        
+            
+        } else {
+            
+            
+            $scope.changepass_error = "";
+            
+            $http({
+                method: 'POST',
+                url: "api/change_pass.php",
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                data: $.param({ 
+                    current_pass : $scope.current_password,
+                    new_pass : $scope.new_pass,
+                    confirm_pass : $scope.confirm_pass
+                })
+                
+            }).then(function (response) {
+                
+                if(response.data.status) {
+                    
+                    Swal.fire({
+                        toast: true,
+                        position: 'top-end',
+                        icon: 'success',
+                        title: 'Password changed!',
+                        showConfirmButton: false,
+                        showCancelButton: false,
+                        timer: 3000,
+                        timerProgressBar: false
+                    });
+                    
+                    
+                    $scope.current_password = "";
+                    
+                    // hide new password block
+                    $scope.show_new_password_block = false;
+                    
+                    
+                } else {
+                    
+                    $scope.changepass_error = "Backend Error: " + response.data.message;
+                }
+                
+            }, function (error) {
+                
+                
+                // handle error
+                $scope.changepass_error = "Didn't reach the backend."
+                
+            });
+            
+            
+        }
+        
+    }
+    
+    
+    
+    /************************* End of Change Password ***************************/
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    /************************* Delete Account ***************************/
+    
+    
+    $scope.show_delete_acct_block = false;
+    $scope.delete_pass_error = "";
+    $scope.delete_account = function() {
+        
+        
+        
+        if(validate_input($scope.delete_account_passsword)) {
+            
+            
+            $http({
+                method: 'POST',
+                url: "api/change_pass.php",
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                data: $.param({                     
+                    current_pass : $scope.delete_account_passsword
+                })
+                
+            }).then(function (response) {
+                
+                if(response.data.status) {
+                    
+                    $scope.delete_pass_error = "";
+                    
+                    
+                    Swal.fire({
+                        title: 'Account Deletion',
+                        html: "You are about to permanently delete your account and its note contents. <span class='text-danger fw-bold'>This cannot be undone.</span> Would you like to proceed?",
+                        icon: 'warning',
+                        confirmButtonColor: "#36bcba",
+                        cancelButtonColor: "red",
+                        showCancelButton: true,
+                        confirmButtonText: 'Confirm',
+                        cancelButtonText: 'Cancel'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            
+
+
+                            $http({
+                                method: 'POST',
+                                url: "api/delete_account.php",
+                                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                                data: $.param({ 
+                                    
+                                })
+                                
+                            }).then(function (response) {
+                                
+                                
+                                Swal.fire({
+                                    toast: true,
+                                    position: 'top-end',
+                                    icon: 'success',
+                                    title: 'Redirecting...',
+                                    showConfirmButton: false,
+                                    showCancelButton: false,
+                                    timer: 2000,
+                                    timerProgressBar: true,
+                                    allowOutsideClick: false,
+                                    allowEscapeKey: false,
+                                    allowEnterKey: false 
+                                });
+                                
+
+                                $timeout(function() {                                        
+                                    window.location.href = "notes.php?logout=y";
+                                }, 2000);
+                                
+
+                    
+                            }, function (error) {
+                                
+                                
+                                // handle error
+                                $scope.delete_pass_error = "Didn't reach the backend";
+                    
+                            });
+                                                   
+                        } else {
+
+                            $scope.$apply(function() {
+
+                                $scope.delete_account_passsword = "";
+                            })
+                        }
+                    })
+                    
+                    
+                } else {
+                    
+                    $scope.delete_pass_error  = "Password Incorrect";
+                    
+                }
+                
+            }, function (error) {
+                
+                
+                // handle error
+                $scope.delete_pass_error  = "Didn't reach the backend";
+                
+            });
+            
+            
+            
+            
+        } else {
+            
+            $scope.delete_pass_error = "Password invalid.";
+        }
+        
+        
+        
+    }
+    
+    /************************* End of Delete Account ***************************/
+    
+    
+    
+    
+    
     // time formatter
     $scope.formatDate = function(datetime) {
         if (!datetime) return '';
         return $filter('date')(new Date(datetime), 'MMM d, yyyy');
     };
+    
+    
+    
+    // validator
+    function validate_input(data) {
+        
+        if(data !== "" && data !== undefined) {
+            
+            return true;
+        }
+    }
 });

@@ -553,7 +553,8 @@ if(isset($_GET['logout'])) {
                             <div class="input-group mb-3 dropstart">
 
                                 <!-- data-bs-toggle="dropdown" aria-expanded="false" -->
-                                <button ng-click="see_profile()" class="btn btn-link link-secondary" >
+                                 <!-- ng-click="see_profile()" -->
+                                <button data-bs-toggle="dropdown" aria-expanded="false" class="btn btn-link link-secondary" >
                                     <!-- src="https://www.jessbaggs.com/res/images/avatars/avatar1.png" -->
                                     <img ng-cloak ng-src="{{view_um_profile_pic}}" style="width: 40px; height: 40px; border: 1px solid #36bcba; border-radius: 50%; object-fit: cover;" alt="">                            
                                 </button>
@@ -563,9 +564,10 @@ if(isset($_GET['logout'])) {
                                 </button>
 
                                 <ul class="dropdown-menu dropdown-menu-dark">
-                                    <li><button ng-click="see_profile()" class="btn btn-link link-light dropdown-item">Profile</button></li>
+                                    <li><button ng-click="see_profile()" class="btn btn-link link-light dropdown-item"><i class="bi bi-person-circle"></i> Account</button></li>
                                     <li><hr class="dropdown-divider"></li>
-                                    <li><button ng-click="changepass_block()" class="btn btn-link link-light dropdown-item">Change Password</button></li>
+                                    <!-- <li><button ng-click="changepass_block()" class="btn btn-link link-light dropdown-item">Change Password</button></li> -->
+                                    <li><button ng-click="logout()" class="btn btn-link link-light dropdown-item"><i class="bi bi-power text-danger" ></i> Log Out</button></li>
                                 </ul>
                                 
                             </div>                                
@@ -619,12 +621,36 @@ if(isset($_GET['logout'])) {
                                             <p class="mt-2 mb-0">Username:  <span class="text-secondary">{{view_um_username}}</span></p>
                                             <p class="mb-0">Role:  <span class="text-secondary">{{view_um_role === "user" ? "regular user" : view_um_role}}</span></p>
                                             <p class="text-secondary m-0"><span class="text-white">Created on</span> {{ formatDate(view_um_account_created) }}</p>
+                                            <p class="text-white">Gender: <span class="text-secondary"><i ng-class="{'bi-gender-male': view_um_gender == 'Male', 'bi-gender-female': view_um_gender !== 'Male'}" class="bi "></i> {{view_um_gender}}</span></p>
+
 
                                             <p ng-cloak class="text-danger fs-3">{{usermeta_error}}</p>
 
-                                            <div class="mt-auto">
-                                                <button ng-click="get_user_meta()" class="btn btn-sm btn-danger">Delete Account</button>
-                                            </div>
+                                            <form ng-submit="delete_account()" class="mt-auto col-xxl-4">
+                                                <div class="d-flex">
+                                                    <button ng-show="!show_delete_acct_block" type="button" ng-click="show_delete_acct_block = true;" class="btn btn-sm btn-danger">Delete Account</button>
+
+                                                    <button ng-click="show_delete_acct_block = false;" ng-show="show_delete_acct_block" type="button" class="btn btn-sm btn-danger">Cancel</button>
+                                                </div>
+                                                
+
+
+                                                <div ng-show="show_delete_acct_block" class="mb-2">
+                                                    <p class="mb-0 mt-3 text-secondary text-start">Password</p>
+                                                    <div class="input-group">
+                                                        <span class="input-group-text" id="basic-addon1">
+                                                            <i class="bi bi-person-circle"></i>
+                                                        </span>
+                                                        
+                                                                                                            
+                                                        <input ng-model="delete_account_passsword" style="color: #36bcba;" type="password" class="form-control bg-dark" aria-label="Username" aria-describedby="basic-addon1" required>                                                    
+                                                    </div>               
+                                                    <div class="mt-2">
+                                                        <p class="text-danger">{{delete_pass_error}}</p>
+                                                    </div>                                 
+                                                </div>
+                                                
+                                            </form>
 
                                         </div>
 
@@ -712,9 +738,13 @@ if(isset($_GET['logout'])) {
                                                 </div>
                                             </div>
 
+                                            <div class="col-xxl-4">
+                                                <p class="text-danger">{{update_info_error}}</p>
+                                            </div>
+
 
                                             <div class="mt-auto col-xxl-4 d-grid mb-3">
-                                                <button ng-disabled="!enable_edit_prof" type="button" class="btn btn-sm" style="background-color: #36bcba;">Save <i class="bi bi-arrow-right"></i></button>                    
+                                                <button ng-click="update_profile()" ng-disabled="!enable_edit_prof" type="button" class="btn btn-sm" style="background-color: #36bcba;">Save <i class="bi bi-arrow-right"></i></button>                    
                                             </div>                    
 
                                         </div>
@@ -727,7 +757,7 @@ if(isset($_GET['logout'])) {
                                             <h2 class="fw-bold mb-3">Change Password</h2>
 
                                             <!-- current password -->
-                                            <div class="col-xxl-4 ">
+                                            <form ng-show="!show_new_password_block" class="col-xxl-4 ">
                                                 <p class="m-0 text-white text-start">Current Password</p>
                                                 <div class="input-group">
                                                     <span class="input-group-text" id="basic-addon1">
@@ -735,18 +765,22 @@ if(isset($_GET['logout'])) {
                                                     </span>
                                                     
                                                                                                         
-                                                    <input style="color: #36bcba;" ng-style="{'border' : reg_fname.length <= 1 ? '1px solid red' : '1 px solid #36bcba'}" type="text" class="form-control bg-dark" aria-label="Username" aria-describedby="basic-addon1" required>                                                    
+                                                    <input ng-model="current_password" style="color: #36bcba;" type="password" class="form-control bg-dark" aria-label="Username" aria-describedby="basic-addon1" required>                                                    
                                                 </div>
 
                                                 <div class="text-end">
-                                                    <button class="btn btn-link link-info text-decoration-none">Next <i class="bi bi-arrow-right"></i></button>
+                                                    <button ng-click="check_current_password()" class="btn btn-link link-info text-decoration-none">Next <i class="bi bi-arrow-right"></i></button>
+                                                </div>
+
+                                                <div class="mt-3">
+                                                    <p class="text-danger">{{changepass_error}}</p>
                                                 </div>
                                                 
-                                            </div>
+                                            </form>
 
 
                                             <!-- new password -->
-                                            <div class="col-xxl-4 d-none">
+                                            <form ng-show="show_new_password_block" class="col-xxl-4">
                                                 <div class="mb-2">
                                                     <p class="m-0 text-white text-start">New Password</p>
                                                     <div class="input-group">
@@ -755,7 +789,7 @@ if(isset($_GET['logout'])) {
                                                         </span>
                                                         
                                                                                                             
-                                                        <input style="color: #36bcba;" ng-style="{'border' : reg_fname.length <= 1 ? '1px solid red' : '1 px solid #36bcba'}" type="password" class="form-control bg-dark" aria-label="Username" aria-describedby="basic-addon1" required>                                                    
+                                                        <input ng-model="new_pass" style="color: #36bcba;" type="password" class="form-control bg-dark" aria-label="Username" aria-describedby="basic-addon1" required>                                                    
                                                     </div>                                                    
                                                 </div>                                                
 
@@ -769,15 +803,20 @@ if(isset($_GET['logout'])) {
                                                         </span>
                                                         
                                                                                                             
-                                                        <input style="color: #36bcba;" ng-style="{'border' : reg_fname.length <= 1 ? '1px solid red' : '1 px solid #36bcba'}" type="password" class="form-control bg-dark" aria-label="Username" aria-describedby="basic-addon1" required>                                                    
+                                                        <input ng-model="confirm_pass" style="color: #36bcba;" type="password" class="form-control bg-dark" aria-label="Username" aria-describedby="basic-addon1" required>                                                    
                                                     </div>
 
+                                                    <div class="mt-3">
+                                                        <p class="text-danger">{{changepass_error}}</p>
+                                                    </div>
+                                                
+
                                                     <div class="text-end">
-                                                        <button class="btn btn-link link-info text-decoration-none">Change Password <i class="bi bi-arrow-right"></i></button>
+                                                        <button ng-click="change_password()" class="btn btn-link link-info text-decoration-none">Change Password <i class="bi bi-arrow-right"></i></button>
                                                     </div>
                                                 </div>                                                
                                                 
-                                            </div>
+                                            </form>
 
                                         </div>
 
