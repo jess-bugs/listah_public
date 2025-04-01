@@ -1,6 +1,6 @@
 var app = angular.module('angularApp', []);
 
-app.controller('angular_controller', function($scope, $http, $timeout, $sce) {
+app.controller('angular_controller', function($scope, $http, $timeout, $filter) {
     
     
     
@@ -12,11 +12,11 @@ app.controller('angular_controller', function($scope, $http, $timeout, $sce) {
         $scope.selectedNoteId = noteId;
         
         // $scope.show_edit_note_mobile();
-
+        
         $scope.note_headers = false;
         $scope.edit_note_mobile = false;
         $scope.loading_anim = true;
-
+        
     };
     /*******************************************************/
     
@@ -26,7 +26,7 @@ app.controller('angular_controller', function($scope, $http, $timeout, $sce) {
     
     $scope.createnote_starred = false;
     $scope.createnote_err_message = "";    
-    $scope.show_create_note_block = true;
+    $scope.show_create_note_block = false;
     $scope.show_view_note_block = false;
     $scope.current_note_id;
     
@@ -43,10 +43,10 @@ app.controller('angular_controller', function($scope, $http, $timeout, $sce) {
     
     
     
-    $scope.show_profile_block = false;
+    $scope.show_profile_block = true;
     $scope.show_changepass_block = false;
-
-
+    
+    
     // tools for quill JS
     const toolbarOptions = [
         ['bold', 'italic', 'underline', 'strike'],        // toggled buttons
@@ -308,16 +308,16 @@ app.controller('angular_controller', function($scope, $http, $timeout, $sce) {
             
             
             
-
+            
             // mobile - show animation for 1 second before displaying note content
             $timeout(function(){
-
+                
                 $scope.note_headers = false;
                 $scope.edit_note_mobile = true;
                 $scope.loading_anim = false;
-
+                
             }, 500)
-
+            
             
             
             
@@ -863,8 +863,8 @@ app.controller('angular_controller', function($scope, $http, $timeout, $sce) {
             cancelButtonText: 'Cancel'
         }).then((result) => {
             
-
-
+            
+            
             if(result.isConfirmed) {
                 $http({
                     method: 'POST',
@@ -885,14 +885,14 @@ app.controller('angular_controller', function($scope, $http, $timeout, $sce) {
                         // for desktop
                         $scope.show_create_note_block = true;
                         $scope.show_view_note_block = false;
-
-
+                        
+                        
                         // for mobile
                         $scope.note_headers = true;
                         $scope.edit_note_mobile = false;
-        
-        
-    
+                        
+                        
+                        
                         Swal.fire({
                             toast: true,
                             position: 'top-end',
@@ -903,7 +903,7 @@ app.controller('angular_controller', function($scope, $http, $timeout, $sce) {
                             timer: 2000,
                             timerProgressBar: false
                         });
-    
+                        
                     } else {
                         
                         Swal.fire({
@@ -921,9 +921,9 @@ app.controller('angular_controller', function($scope, $http, $timeout, $sce) {
                     
                 });;
                 
-
+                
             }
-
+            
             
         });
         
@@ -931,57 +931,241 @@ app.controller('angular_controller', function($scope, $http, $timeout, $sce) {
     }
     
     
-
-
-
-
+    
+    
+    
+    
     // show profile block
     $scope.see_profile = function() {
-
+        
         
         $scope.show_changepass_block = false;
         $scope.show_create_note_block = false;
         $scope.show_view_note_block = false;
         
         $scope.show_profile_block = true;
-
-
+        
+        
     }
-
-
-
-
+    
+    
+    
+    
     // change password block
     $scope.changepass_block = function() {
-
+        
         $scope.show_profile_block = false;
         $scope.show_create_note_block = false;
         $scope.show_view_note_block = false;
-                
+        
         $scope.show_changepass_block = true;
-
+        
     }
-
-
-
-
+    
+    
+    
+    
+    
+    // switching active tab
     $scope.current_tab = "geninfo";
-
+    
     $scope.change_current_tab = function(tab) {
-
+        
         $scope.current_tab = tab;
     }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    /****************************** USERMETA ******************************/
+    
+    
+    
+    $scope.usermeta_error = "";
+    $scope.enable_edit_prof = false;
+    
+    // fetch user meta
+    $scope.get_user_meta = function() {
+        
+        $http({
+            method: 'POST',
+            url: "api/get_usermeta.php",
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            
+        }).then(function (response) {
+            
+            if(response.data.status) {
+                
+                angular.forEach(response.data.rows, function(row) {
+                    
+                    $scope.view_um_userid = row.user_id;
+                    $scope.view_um_username = row.user;
+                    $scope.view_um_fname = row.first_name;
+                    $scope.view_um_lname = row.last_name;
+                    $scope.view_um_gender = row.gender;
+                    $scope.view_um_profile_pic = row.image_path;
+                    $scope.view_um_account_status = row.account_status;
+                    $scope.view_um_role = row.role;
+                    $scope.view_um_account_created = row.account_created;
+                    
+                    
+                    
+                    
+                    $scope.update_fname = $scope.view_um_fname;
+                    $scope.update_lname = $scope.view_um_lname;
+                    $scope.update_gender = $scope.view_um_gender; 
+                    
+                })
+            }
+            
+            
+        }, function (error) {
+            
+            $scope.usermeta_error = "Failed to reach backend.";
+            // handle error
+            
+        });
+        
+        
+    }
+    
+    
+    // initial fetch
+    $scope.get_user_meta();
+    
+    
+    
+    
+    
+    
+    
+    // function to update profile
+    $scope.update_profile = function() {
+        
+        
+    }
+    
+    
+    
+    
+    // cancel updating profile
+    $scope.cancel_update_profile = function() {
+        
+        $scope.enable_edit_prof = false;
+        
+        // set original values
+        $scope.update_fname = $scope.view_um_fname;
+        $scope.update_lname = $scope.view_um_lname;
+        $scope.update_gender = $scope.view_um_gender; 
+        
+        
+    }
+    
+    
+    
+    
+    
+    
+    
+    $scope.update_profile_pic = function() {
+        
+        $("#profile-file-input").click();
+    }
+    
+    
+    
+    // file input trigger
+    $("#profile-file-input").on('change', function() {
+        
+        var file = this.files[0];
+        if (file) {
+            var reader = new FileReader();
+            reader.onload = function (e) {
+                
+                let src = e.target.result;
+                
+                
+                Swal.fire({
+                    title: "Update Avatar",
+                    text: "This image source is dynamic.",
+                    html: `
+                    <img src="${src}" style="max-height: 250px;">
+                    <p>Would you like to proceed to change your avatar?</p>
+                    `,
+                    imageAlt: "New Profile Pic",
+                    showCancelButton: true,
+                    confirmButtonText: "OK",
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        
+                        let profile_pic_input = $("#profile-file-input")[0];
+                        
+                        let formData = new FormData();                        
+                        
+                        if (profile_pic_input.files.length > 0) {
+                        
+                            formData.append("profile_image", profile_pic_input.files[0]);
+                        } else {
+                            
+                            $scope.usermeta_error = "Failed to get image.";
+                        }
+                        
+                        
+                        
+                        $http({
+                            method: 'POST',
+                            url: "api/update_profile_pic.php",
+                            headers: { 'Content-Type': undefined },
+                            data: formData,
+                            transformRequest: angular.identity
+                            
+                        }).then(function (response) {
+                            
+                            if(response.data.status) {
 
+                                // console.log(response.data.message);
+                                $scope.get_user_meta();
 
+                            } else {
 
-
-
-
-
-
-
-
-
-
-
+                            
+                                $scope.usermeta_error = "Server Response: " + response.data.message;
+                            }
+                            
+                        }, function (error) {
+                            
+                            
+                            // handle error
+                            $scope.usermeta_error = "Failed to reach backend.";
+                        });
+                        
+                    }
+                });
+                
+                
+            };
+            reader.readAsDataURL(file);
+        }
+        
+    })
+    
+    
+    
+    
+    /****************************** End of USERMETA ******************************/
+    
+    
+    
+    
+    
+    // time formatter
+    $scope.formatDate = function(datetime) {
+        if (!datetime) return '';
+        return $filter('date')(new Date(datetime), 'MMM d, yyyy');
+    };
 });

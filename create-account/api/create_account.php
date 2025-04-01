@@ -104,7 +104,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             
             if (move_uploaded_file($fileTmpPath, $destPath)) {
                 
-                $image_path = $uploadDir . $newFileName;
+                $image_path  = "/listah/notes/profiles/" . $newFileName;
             
             }
             

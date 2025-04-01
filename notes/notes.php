@@ -87,6 +87,12 @@ if(isset($_GET['logout'])) {
             background-color: transparent;
             border-right: 3px solid #36bcba; /* Makes the border invisible */
         }
+
+
+        [ng-cloak] {
+            display: none !important;
+        }
+
     </style>
     
 </head>
@@ -537,7 +543,7 @@ if(isset($_GET['logout'])) {
                     <!-- header for content -->
                     <div class="d-flex p-1 rounded-2" >                
                         <div class="me-auto">
-                            <p class="text-white">Hi there, <span class="fw-bold">Jess Baggs...</span></p>
+                            <p ng-cloak class="text-white">Hi there, <span class="fw-bold">{{view_um_fname + " " + view_um_lname}}...</span></p>
                         </div>
                         
                         <div class="ms-auto me-2 d-inline">                                                                
@@ -548,7 +554,8 @@ if(isset($_GET['logout'])) {
 
                                 <!-- data-bs-toggle="dropdown" aria-expanded="false" -->
                                 <button ng-click="see_profile()" class="btn btn-link link-secondary" >
-                                    <img style="width: 40px; height: 40px; border: 1px solid #36bcba; border-radius: 50%; object-fit: cover;" src="https://www.jessbaggs.com/res/images/avatars/avatar1.png" alt="">                            
+                                    <!-- src="https://www.jessbaggs.com/res/images/avatars/avatar1.png" -->
+                                    <img ng-cloak ng-src="{{view_um_profile_pic}}" style="width: 40px; height: 40px; border: 1px solid #36bcba; border-radius: 50%; object-fit: cover;" alt="">                            
                                 </button>
                                 
                                 <button type="button" class="btn btn-outline-secondary dropdown-toggle dropdown-toggle-split d-none" data-bs-toggle="dropdown" aria-expanded="false">
@@ -596,21 +603,27 @@ if(isset($_GET['logout'])) {
 
                                             <!-- profile pic -->
                                             <p>
-                                                <img style="width: 100px; height: 100px; border: 1px solid #36bcba; border-radius: 50%; object-fit: cover;" src="https://www.jessbaggs.com/res/images/avatars/avatar1.png">                            
+                                                <!-- src="https://www.jessbaggs.com/res/images/avatars/avatar1.png" -->
+                                                <img ng-src="{{view_um_profile_pic}}" style="width: 100px; height: 100px; border: 1px solid #36bcba; border-radius: 50%; object-fit: cover;">                            
                                                 <br>
-                                                <button style="font-size: 14px;" class="btn btn-link link-info">
+                                                <button ng-click="update_profile_pic()" style="font-size: 14px;" class="btn btn-link link-info">
                                                     <i class="bi bi-camera-fill"></i>
                                                 </button>
+
+
+                                                <input class="d-none" id="profile-file-input" type="file" accept=".jpeg, .jpg, .png, .gif">
                                             </p>
                                             
 
-                                            <h2 class="mt-1 fw-bold ">Jess Baggs</h2>
-                                            <p class="mt-2 mb-0">Username:  <span class="text-secondary">jessbugs</span></p>
-                                            <p class="mb-0">Role:  <span class="text-secondary">regular user</span></p>
-                                            <p class="text-secondary m-0">Created on Sep 04, 2025</p>
+                                            <h2 class="mt-1 fw-bold ">{{view_um_fname + " " + view_um_lname}}</h2>
+                                            <p class="mt-2 mb-0">Username:  <span class="text-secondary">{{view_um_username}}</span></p>
+                                            <p class="mb-0">Role:  <span class="text-secondary">{{view_um_role === "user" ? "regular user" : view_um_role}}</span></p>
+                                            <p class="text-secondary m-0"><span class="text-white">Created on</span> {{ formatDate(view_um_account_created) }}</p>
+
+                                            <p ng-cloak class="text-danger fs-3">{{usermeta_error}}</p>
 
                                             <div class="mt-auto">
-                                                <button class="btn btn-sm btn-danger">Delete Account</button>
+                                                <button ng-click="get_user_meta()" class="btn btn-sm btn-danger">Delete Account</button>
                                             </div>
 
                                         </div>
@@ -621,8 +634,19 @@ if(isset($_GET['logout'])) {
                                         <!-- block - Edit Profile -->
                                         <div ng-show="current_tab == 'edit-profile'" class="p-2 d-flex flex-column h-100">
 
-                                            <h2 class="fw-bold mb-3">Edit Profile</h2>
+                                            
                                         
+                                            <div class="d-flex col-xxl-4 align-items-center mt-3">
+                                                <div class="">
+                                                    <h2 class="fw-bold mb-3">Edit Profile</h2>
+                                                </div>
+
+                                                <div class="ms-auto ">
+                                                    <button ng-show="!enable_edit_prof" ng-click="enable_edit_prof = true" class="btn btn-sm btn-success">Edit</button>
+                                                    <button ng-show="enable_edit_prof" ng-click="cancel_update_profile()" class="btn btn-sm btn-danger">Cancel</button>
+                                                </div>
+                                            </div>
+
                                             <!-- first name -->
                                             <div class="col-xxl-4">
                                                 <p class="m-0 text-secondary text-start">First Name</p>
@@ -633,7 +657,16 @@ if(isset($_GET['logout'])) {
                                                     
                                                     
                                                     <!-- style="border: 1px solid #36bcba; color: #36bcba;" -->
-                                                    <input style="color: #36bcba;" ng-style="{'border' : reg_fname.length <= 1 ? '1px solid red' : '1 px solid #36bcba'}" type="text" class="form-control bg-dark" aria-label="Username" aria-describedby="basic-addon1" required>
+                                                    <input ng-style="{
+                                                    'color' : enable_edit_prof ? '#36bcba' : 'gray',
+                                                    'border' : enable_edit_prof ? '1px solid white' : '1px solid grey'
+                                                    }" 
+                                                    ng-disabled="!enable_edit_prof" 
+                                                    ng-model="update_fname" 
+                                                    type="text" 
+                                                    class="form-control bg-dark" 
+                                                    aria-label="Username" 
+                                                    aria-describedby="basic-addon1" required>                                                    
                                                 </div>
                                             </div>
                                             
@@ -648,7 +681,17 @@ if(isset($_GET['logout'])) {
                                                     
                                                     
                                                     <!-- style="border: 1px solid #36bcba; color: #36bcba;" -->
-                                                    <input style="color: #36bcba;" ng-style="{'border' : reg_fname.length <= 1 ? '1px solid red' : '1 px solid #36bcba'}" type="text" class="form-control bg-dark" aria-label="Username" aria-describedby="basic-addon1" required>
+                                                    <input 
+                                                    ng-style="{
+                                                    'color' : enable_edit_prof ? '#36bcba' : 'gray',
+                                                    'border' : enable_edit_prof ? '1px solid white' : '1px solid grey'
+                                                    }" 
+                                                    ng-disabled="!enable_edit_prof" 
+                                                    ng-model="update_lname" 
+                                                    type="text" 
+                                                    class="form-control bg-dark" 
+                                                    aria-label="Username" 
+                                                    aria-describedby="basic-addon1" required>
                                                 </div>
                                             </div>
                     
@@ -662,7 +705,7 @@ if(isset($_GET['logout'])) {
                                                         <i class="bi bi-person-circle"></i>
                                                     </span>
                                                                                                     
-                                                    <select style="border: 1px solid #36bcba;" class="form-control bg-dark text-white" aria-label="Default select example">
+                                                    <select ng-style="{'color' : enable_edit_prof ? '#36bcba' : 'gray', 'border' : enable_edit_prof ? '1px solid white' : '1px solid grey'}" ng-disabled="!enable_edit_prof" ng-model="update_gender" class="form-control bg-dark" aria-label="Default select example">
                                                         <option value="Male">Male</option>
                                                         <option value="Female">Female</option>
                                                     </select>
@@ -671,7 +714,7 @@ if(isset($_GET['logout'])) {
 
 
                                             <div class="mt-auto col-xxl-4 d-grid mb-3">
-                                                <button type="button" class="btn btn-sm" style="background-color: #36bcba;">Save <i class="bi bi-arrow-right"></i></button>                    
+                                                <button ng-disabled="!enable_edit_prof" type="button" class="btn btn-sm" style="background-color: #36bcba;">Save <i class="bi bi-arrow-right"></i></button>                    
                                             </div>                    
 
                                         </div>
