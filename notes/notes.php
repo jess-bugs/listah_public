@@ -110,7 +110,8 @@ if(isset($_GET['logout'])) {
                 
                 <button class="btn btn-sm btn-light " type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent">
                     <!-- <span class="navbar-toggler-icon"></span> -->
-                    <img style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover;" src="https://www.jessbaggs.com/images/me.jpg" alt="">                            
+                    <!-- src="https://www.jessbaggs.com/images/me.jpg" -->
+                    <img ng-src="{{view_um_profile_pic}}" class="border border-muted" style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover;"  alt="">                            
                 </button>
                 
 
@@ -119,8 +120,13 @@ if(isset($_GET['logout'])) {
                     <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                         
                         <li class="nav-item">
-                            <button ng-click="logout()" class="btn btn-link link-danger text-decoration-none"><i class="bi bi-power text-danger" ></i> Logout</button>
-                        </li>                                                            
+                            <button data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" ng-click="edit_profile_mobile(true)" class="btn btn-link link-dark text-decoration-none"><i class="bi bi-person" ></i> Profile</button>
+                        </li>
+
+                        <li class="nav-item">
+                            <button data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" ng-click="logout()" class="btn btn-link link-danger text-decoration-none"><i class="bi bi-power text-danger" ></i> Logout</button>
+                        </li>
+                                                                                    
                     </ul>                    
                 </div>
 
@@ -523,6 +529,246 @@ if(isset($_GET['logout'])) {
 
                 
 
+                            </div>
+
+
+
+
+                            <!-- edit profile info -->
+                            <div ng-show="edit_profile_block" class="p-1 rounded d-flex flex-column d-lg-none">
+                                
+                                <div class="d-flex align-items-center">
+                                    
+                                    <h2 class="fw-bold">Account Management</h2>
+
+                                    <div class="ms-auto text-white">
+                                        <button ng-click="edit_profile_mobile(false)" class="btn btn-link link-light fw-bold">
+                                            <i class="bi bi-x-lg fw-bold"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                                
+                            
+                                <div class="d-flex my-3">
+                                    <a style="font-size: 12px;" href="javascript:;" ng-click="change_current_tab('geninfo')" ng-class="{'active-tab' : current_tab == 'geninfo', 'bg-dark' : current_tab == 'geninfo', 'link-light' : current_tab == 'geninfo', 'link-secondary' : current_tab !== 'geninfo'}" style="border-radius: 0%;" class="link text-decoration-none text-start p-2 rounded"><i class="bi bi-person-circle "></i> General Info</a>
+                                    <a style="font-size: 12px;" href="javascript:;" ng-click="change_current_tab('edit-profile')" ng-class="{'active-tab' : current_tab == 'edit-profile', 'bg-dark' : current_tab == 'edit-profile', 'link-light' : current_tab == 'edit-profile', 'link-secondary' : current_tab !== 'edit-profile' }" style="border-radius: 0%;" class="link text-decoration-none text-start p-2 rounded"><i class="bi bi-pencil-square "></i> Edit Profile</a>
+                                    <a style="font-size: 12px;" href="javascript:;" ng-click="change_current_tab('change-password')" ng-class="{'active-tab' : current_tab == 'change-password', 'bg-dark' : current_tab == 'change-password', 'link-light' : current_tab == 'change-password', 'link-secondary' : current_tab !== 'change-password' }" style="border-radius: 0%;" class="link text-decoration-none text-start p-2 rounded"><i class="bi bi-shield-exclamation   me-2"></i> Change Password</a>                    
+                                </div>
+                                
+                                <!-- block - general info -->
+                                <div ng-show="current_tab == 'geninfo'" class="p-2 d-flex flex-column">
+
+                                    <!-- profile pic -->
+                                    <p>
+                                        <!-- src="https://www.jessbaggs.com/res/images/avatars/avatar1.png" -->
+                                        <img ng-src="{{view_um_profile_pic}}" style="width: 100px; height: 100px; border: 1px solid #36bcba; border-radius: 50%; object-fit: cover;">                            
+                                        <br>
+                                        <button ng-click="update_profile_pic()" style="font-size: 14px;" class="btn btn-link link-info">
+                                            <i class="bi bi-camera-fill"></i>
+                                        </button>
+                                        
+                                        
+                                        <input class="d-none" id="profile-file-input" type="file" accept=".jpeg, .jpg, .png, .gif">
+                                    </p>
+
+                                    <h2 class="mt-1 fw-bold ">{{view_um_fname + " " + view_um_lname}}</h2>
+                                    <p class="mt-2 mb-0">Username:  <span class="text-secondary">{{view_um_username}}</span></p>
+                                    <p class="mb-0">Role:  <span class="text-secondary">{{view_um_role === "user" ? "regular user" : view_um_role}}</span></p>
+                                    <p class="text-secondary m-0"><span class="text-white">Created on</span> {{ formatDate(view_um_account_created) }}</p>
+                                    <p class="text-white">Gender: <span class="text-secondary"><i ng-class="{'bi-gender-male': view_um_gender == 'Male', 'bi-gender-female': view_um_gender !== 'Male'}" class="bi "></i> {{view_um_gender}}</span></p>
+                        
+                                    <p ng-cloak class="text-danger fs-3">{{usermeta_error}}</p>
+
+
+                                    <form ng-submit="delete_account()" class="mt-auto col-xxl-4">
+                                        <div class="d-flex">
+                                            <button ng-show="!show_delete_acct_block" type="button" ng-click="show_delete_acct_block = true;" class="btn btn-sm btn-danger">Delete Account</button>
+                                            
+                                            <button ng-click="show_delete_acct_block = false;" ng-show="show_delete_acct_block" type="button" class="btn btn-sm btn-danger">Cancel</button>
+                                        </div>
+                                        
+                                        
+                                        
+                                        <div ng-show="show_delete_acct_block" class="mb-2">
+                                            <p class="mb-0 mt-3 text-secondary text-start">Password</p>
+                                            <div class="input-group">
+                                                <span class="input-group-text" id="basic-addon1">
+                                                    <i class="bi bi-person-circle"></i>
+                                                </span>
+                                                
+                                                
+                                                <input ng-model="delete_account_passsword" style="color: #36bcba;" type="password" class="form-control bg-dark" aria-label="Username" aria-describedby="basic-addon1" required>                                                    
+                                            </div>               
+                                            <div class="mt-2">
+                                                <p class="text-danger">{{delete_pass_error}}</p>
+                                            </div>                                 
+                                        </div>
+                                        
+                                    </form>
+
+                                </div>
+
+
+                                <!-- block - Edit Profile -->
+                                <div ng-show="current_tab == 'edit-profile'" class="p-2 d-flex flex-column">
+
+                                    <div class="d-flex col-xxl-4 align-items-center mt-3">
+                                        <div class="">
+                                            <h2 class="fw-bold mb-3">Edit Profile</h2>
+                                        </div>
+                                        
+                                        <div class="ms-auto ">
+                                            <button ng-show="!enable_edit_prof" ng-click="enable_edit_prof = true" class="btn btn-sm btn-success">Edit</button>
+                                            <button ng-show="enable_edit_prof" ng-click="cancel_update_profile()" class="btn btn-sm btn-danger">Cancel</button>
+                                        </div>
+                                    </div>
+
+
+                                    <!-- first name -->
+                                    <div class="col-xxl-4">
+                                        <p class="m-0 text-secondary text-start">First Name</p>
+                                        <div class="input-group mb-3">
+                                            <span class="input-group-text" id="basic-addon1">
+                                                <i class="bi bi-person-circle"></i>
+                                            </span>
+                                            
+                                            
+                                            <!-- style="border: 1px solid #36bcba; color: #36bcba;" -->
+                                            <input ng-style="{
+                                                'color' : enable_edit_prof ? '#36bcba' : 'gray',
+                                                'border' : enable_edit_prof ? '1px solid white' : '1px solid grey'
+                                            }" 
+                                            ng-disabled="!enable_edit_prof" 
+                                            ng-model="update_fname" 
+                                            type="text" 
+                                            class="form-control bg-dark" 
+                                            aria-label="Username" 
+                                            aria-describedby="basic-addon1" required>                                                    
+                                        </div>
+                                    </div>
+
+
+                                    <!-- last name -->
+                                    <div class="col-xxl-4">
+                                        <p class="m-0 text-secondary text-start">Last Name</p>
+                                        <div class="input-group mb-3">
+                                            <span class="input-group-text" id="basic-addon1">
+                                                <i class="bi bi-person-circle"></i>
+                                            </span>
+                                            
+                                            
+                                            <!-- style="border: 1px solid #36bcba; color: #36bcba;" -->
+                                            <input 
+                                            ng-style="{
+                                                'color' : enable_edit_prof ? '#36bcba' : 'gray',
+                                                'border' : enable_edit_prof ? '1px solid white' : '1px solid grey'
+                                            }" 
+                                            ng-disabled="!enable_edit_prof" 
+                                            ng-model="update_lname" 
+                                            type="text" 
+                                            class="form-control bg-dark" 
+                                            aria-label="Username" 
+                                            aria-describedby="basic-addon1" required>
+                                        </div>
+                                    </div>
+                        
+                                    <!-- gender -->
+                                    <div class="col-xxl-4">
+                                        <p class="m-0 text-secondary text-start">Gender</p>
+                                        <div class="input-group mb-3">
+                                            <span class="input-group-text" id="basic-addon1">
+                                                <i class="bi bi-person-circle"></i>
+                                            </span>
+                                            
+                                            <select ng-style="{'color' : enable_edit_prof ? '#36bcba' : 'gray', 'border' : enable_edit_prof ? '1px solid white' : '1px solid grey'}" ng-disabled="!enable_edit_prof" ng-model="update_gender" class="form-control bg-dark" aria-label="Default select example">
+                                                <option value="Male">Male</option>
+                                                <option value="Female">Female</option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+
+                                    <div class="col-xxl-4">
+                                        <p class="text-danger">{{update_info_error}}</p>
+                                    </div>
+
+                                    
+                                    <div class="mt-auto col-xxl-4 d-grid mb-3">
+                                        <button ng-click="update_profile()" ng-disabled="!enable_edit_prof" type="button" class="btn btn-sm" style="background-color: #36bcba;">Save <i class="bi bi-arrow-right"></i></button>                    
+                                    </div>
+                                
+                                </div>
+
+
+                                <!-- block - change password -->
+                                <div ng-show="current_tab == 'change-password'" class="p-2 ">
+
+                                    <h2 class="fw-bold mb-3">Change Password</h2>
+
+                                    <!-- current password -->
+                                    <form ng-show="!show_new_password_block" class="col-xxl-4 ">
+                                        <p class="m-0 text-white text-start">Current Password</p>
+                                        <div class="input-group">
+                                            <span class="input-group-text" id="basic-addon1">
+                                                <i class="bi bi-person-circle"></i>
+                                            </span>
+                                            
+                                            
+                                            <input ng-model="current_password" style="color: #36bcba;" type="password" class="form-control bg-dark" aria-label="Username" aria-describedby="basic-addon1" required>                                                    
+                                        </div>
+                                        
+                                        <div class="text-end">
+                                            <button ng-click="check_current_password()" class="btn btn-link link-info text-decoration-none">Next <i class="bi bi-arrow-right"></i></button>
+                                        </div>
+                                        
+                                        <div class="mt-3">
+                                            <p class="text-danger">{{changepass_error}}</p>
+                                        </div>
+                                        
+                                    </form>
+
+
+                                    <!-- new password -->
+                                    <form ng-show="show_new_password_block" class="col-xxl-4">
+                                        <div class="mb-2">
+                                            <p class="m-0 text-white text-start">New Password</p>
+                                            <div class="input-group">
+                                                <span class="input-group-text" id="basic-addon1">
+                                                    <i class="bi bi-person-circle"></i>
+                                                </span>
+                                                
+                                                
+                                                <input ng-model="new_pass" style="color: #36bcba;" type="password" class="form-control bg-dark" aria-label="Username" aria-describedby="basic-addon1" required>                                                    
+                                            </div>                                                    
+                                        </div>                                                
+                                        
+                                        
+                                        <!-- confirm password -->
+                                        <div class="mb-2 mt-4">
+                                            <p class="m-0 text-white text-start">Confirm Password</p>
+                                            <div class="input-group">
+                                                <span class="input-group-text" id="basic-addon1">
+                                                    <i class="bi bi-person-circle"></i>
+                                                </span>
+                                                
+                                                
+                                                <input ng-model="confirm_pass" style="color: #36bcba;" type="password" class="form-control bg-dark" aria-label="Username" aria-describedby="basic-addon1" required>                                                    
+                                            </div>
+                                            
+                                            <div class="mt-3">
+                                                <p class="text-danger">{{changepass_error}}</p>
+                                            </div>
+                                            
+                                            
+                                            <div class="text-end">
+                                                <button ng-click="change_password()" class="btn btn-link link-info text-decoration-none">Change Password <i class="bi bi-arrow-right"></i></button>
+                                            </div>
+                                        </div>                                                
+                                        
+                                    </form>
+
+                                </div>
+                                
                             </div>
                             
                             

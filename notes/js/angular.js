@@ -710,7 +710,7 @@ app.controller('angular_controller', function($scope, $http, $timeout, $filter) 
                     
                     
                     
-                    // show headers / hided create note for mobile
+                    // show headers / hide create note for mobile
                     $scope.note_headers = true;
                     $scope.create_note_mobile = false;
                     
@@ -1200,7 +1200,7 @@ app.controller('angular_controller', function($scope, $http, $timeout, $filter) 
                         }).then(function (response) {
                             
                             $scope.usermeta_error = "";
-
+                            
                             if(response.data.status) {
                                 
                                 // console.log(response.data.message);
@@ -1440,8 +1440,8 @@ app.controller('angular_controller', function($scope, $http, $timeout, $filter) 
                     }).then((result) => {
                         if (result.isConfirmed) {
                             
-
-
+                            
+                            
                             $http({
                                 method: 'POST',
                                 url: "api/delete_account.php",
@@ -1467,25 +1467,25 @@ app.controller('angular_controller', function($scope, $http, $timeout, $filter) 
                                     allowEnterKey: false 
                                 });
                                 
-
+                                
                                 $timeout(function() {                                        
                                     window.location.href = "notes.php?logout=y";
                                 }, 2000);
                                 
-
-                    
+                                
+                                
                             }, function (error) {
                                 
                                 
                                 // handle error
                                 $scope.delete_pass_error = "Didn't reach the backend";
-                    
+                                
                             });
-                                                   
+                            
                         } else {
-
+                            
                             $scope.$apply(function() {
-
+                                
                                 $scope.delete_account_passsword = "";
                             })
                         }
@@ -1520,6 +1520,46 @@ app.controller('angular_controller', function($scope, $http, $timeout, $filter) 
     
     /************************* End of Delete Account ***************************/
     
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    /************************* Edit Profile Block ***************************/
+    
+    
+    $scope.edit_profile_block = false;
+    
+    $scope.edit_profile_mobile = function(editing) {
+        
+        if(editing) {
+        
+            $scope.note_headers = false;
+            $scope.edit_note_mobile = false;
+            $scope.create_note_mobile = false;
+            $scope.edit_profile_block = true;
+            
+        } else {
+
+            $scope.note_headers = true;
+            $scope.edit_profile_block = false;
+
+            $scope.current_tab = "geninfo";
+        }
+
+        
+        
+        
+    };
+    
+    
+    
+    /************************* End of Edit Profile Block ***************************/
     
     
     
