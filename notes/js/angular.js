@@ -118,6 +118,65 @@ app.controller('angular_controller', function($scope, $http, $timeout, $filter) 
     });
     
     
+
+
+
+
+
+
+
+    // function to discard and clear create note block
+    $scope.discard_create_note = function() {
+
+        $scope.createnote_quill_content = quill.root.innerHTML;
+        let quill_content =  $scope.createnote_quill_content.replace(/<\/?[^>]+(>|$)/g, "");
+
+        
+        if (($scope.createnote_title && $scope.createnote_title.trim() !== "") || 
+            (quill_content && quill_content.trim() !== "") || 
+            ($scope.createnote_subject && $scope.createnote_subject.trim() !== "")) {
+
+            Swal.fire({
+                title: 'Discard Note',
+                text: "Are you sure you want to discard this note? All unsaved changes will be lost.",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#36bcba',
+                cancelButtonColor: 'red',
+                confirmButtonText: 'Confirm',
+                cancelButtonText: 'Cancel'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    
+                    // clear quill JS
+                    quill.clipboard.dangerouslyPasteHTML("");
+    
+                    $scope.$apply(function() {
+    
+                        // clear the title
+                        $scope.createnote_title = "";
+    
+                        // remove star
+                        $scope.createnote_starred = false;
+    
+                        // clear error message
+                        $scope.createnote_err_message = "";
+    
+                        // clear subject field
+                        $scope.createnote_subject = "";
+    
+                    });
+                }
+            });
+
+        }
+        
+    };
+
+
+
+
+
     
     // function to create the note
     $scope.create_new_note = function() {
@@ -646,6 +705,65 @@ app.controller('angular_controller', function($scope, $http, $timeout, $filter) 
     
     
     
+
+
+
+
+
+
+
+
+
+    $scope.discard_create_note_mobile = function() {
+
+        $scope.createnote_quill_content_mobile = quill_create_mobile.root.innerHTML;
+        let quill_content =  $scope.createnote_quill_content_mobile.replace(/<\/?[^>]+(>|$)/g, "");
+
+        
+        if (($scope.createnote_title && $scope.createnote_title.trim() !== "") || 
+            (quill_content && quill_content.trim() !== "") || 
+            ($scope.createnote_subject && $scope.createnote_subject.trim() !== "")) {
+
+            Swal.fire({
+                title: 'Discard Note',
+                text: "Are you sure you want to discard this note? All unsaved changes will be lost.",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#36bcba',
+                cancelButtonColor: 'red',
+                confirmButtonText: 'Confirm',
+                cancelButtonText: 'Cancel'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    
+                    // clear quill JS
+                    quill_create_mobile.clipboard.dangerouslyPasteHTML("");
+    
+                    $scope.$apply(function() {
+    
+                        // clear the title
+                        $scope.createnote_title = "";
+    
+                        // remove star
+                        $scope.createnote_starred = false;
+    
+                        // clear error message
+                        $scope.createnote_err_message = "";
+    
+                        // clear subject field
+                        $scope.createnote_subject = "";
+    
+                    });
+                }
+            });
+
+        }
+        
+    };
+
+
+
+
     
     
     

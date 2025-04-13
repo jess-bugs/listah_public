@@ -25,7 +25,7 @@ if(isset($_GET['logout'])) {
 }
 
 ?>
-
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -35,6 +35,7 @@ if(isset($_GET['logout'])) {
     <meta name="author" content="Jess Baggs">
     <meta name="keywords" content="listah, listahan, notes, notes list, note taking">
     <meta name="description" content="Create notes seamlessly anytime, anywhere with Listah!">
+    <link rel="icon" href="https://www.jessbaggs.com/res/images/listah/listah-logo.png" type="image/x-icon">
     
     
     <!-- jQuery -->
@@ -403,7 +404,7 @@ if(isset($_GET['logout'])) {
 
                                 
                                 <!-- note contents -->
-                                <div class="mt-2">
+                                <div class="mt-2" style="height: 100vh; overflow-y: scroll;">
 
                                     <div class="d-flex">
                                         <!-- note title -->
@@ -429,16 +430,23 @@ if(isset($_GET['logout'])) {
                                     </div>
                                     
                                     
+                                    <button data-bs-toggle="collapse" data-bs-target="#collapse-for-editnote" class="btn btn-sm btn-outline-secondary">
+                                        <i class="bi bi-arrow-down-circle"></i>
+                                    </button>
                                     
-                                    <!-- subject -->
-                                    <div class="mt-3 mb-3">
-                                        <input maxlength="100" ng-model="update_subject" style="width: auto; display: inline-block;" id="createnote_subj" type="text" class="form-control form-control-sm bg-dark border border-warning text-white" placeholder="subject">
+                                    
+                                    <div id="collapse-for-editnote" class="collapse">
+                                        <!-- subject -->
+                                        <div class="mt-3 mb-3">
+                                            <input maxlength="100" ng-model="update_subject" style="width: auto; display: inline-block;" id="createnote_subj" type="text" class="form-control form-control-sm bg-dark border border-warning text-white" placeholder="subject">
+                                        </div>
+                        
+                                        <p class="text-secondary m-0">Created on <span class="text-info">{{update_date_created | date:'MMM dd, yyyy'}}</span></p>
+                                        <p class="text-secondary m-0">Modified on <span class="text-info">{{update_last_mod | date:'MMM dd, yyyy HH:mm a'}}</span></p>                        
                                     </div>
-                    
 
-                                    <p class="text-secondary m-0">Created on <span class="text-info">{{update_date_created | date:'MMM dd, yyyy'}}</span></p>
-                                    <p class="text-secondary m-0">Modified on <span class="text-info">{{update_last_mod | date:'MMM dd, yyyy HH:mm a'}}</span></p>
-                    
+
+
                                     <!-- tools -->
                                     <div class="d-flex mt-4 mb-2">
                                         
@@ -456,7 +464,7 @@ if(isset($_GET['logout'])) {
 
                                     <!-- quill text editor -->
                                     <div class=" rounded-2" >                        
-                                        <div id="editor-view-note-mobile"  style="max-height: 400px; width: 100%; overflow-y: scroll;"></div>                        
+                                        <div id="editor-view-note-mobile"  style="height: 300px; width: 100%; overflow-y: scroll;"></div>                        
                                     </div>                    
                     
                     
@@ -510,9 +518,12 @@ if(isset($_GET['logout'])) {
                                     <!-- note star -->
                                     <div class="d-flex align-items-center mt-3">
                                         
+                                        <div class="me-auto">
+                                            <button ng-click="discard_create_note_mobile()" class="btn btn-sm btn-secondary">Discard</button>
+                                        </div>
                                         
                                         <button data-bs-toggle="tooltip" title="Star this note" data-bs-placement="top"  ng-click="star_note()" class="btn  btn-link link-warning fs-3"><i ng-class="{'bi-star-fill' : createnote_starred, 'bi-star' : !createnote_starred}" class="bi"></i></button>                            
-                                        <div class="ms-auto">
+                                        <div class="">
                                             <button ng-click="create_new_note_mobile()" class="btn btn-link link-info text-decoration-none">Create <i class="bi bi-arrow-right"></i></button>
                                         </div>
                                         
@@ -1089,11 +1100,8 @@ if(isset($_GET['logout'])) {
                     <!-- BLOCK - creating note -->
                     <div id="create-note" ng-show="show_create_note_block">
                         
-
                         
-
-                        
-                        <h3 class="fw-bold" style="color: #36bcba;">Create a Note</h3>
+                        <h3 class="fw-bold" style="color: #36bcba;">Create a Note</h3>                        
                         
                         <!-- note title -->                        
                         <div class="mt-2">
@@ -1119,7 +1127,11 @@ if(isset($_GET['logout'])) {
                         
                         
                         <!-- note star -->
-                        <div class="d-flex align-items-center justify-content-end">
+                        <div class="d-flex align-items-center ">
+                            <div class="me-auto">
+                                <button ng-click="discard_create_note()" class="btn btn-sm btn-secondary">Discard</button>
+                            </div>
+                            
                             <button data-bs-toggle="tooltip" title="Star this note" data-bs-placement="top" ng-click="star_note()" class="btn  btn-link link-warning fs-3"><i ng-class="{'bi-star-fill' : createnote_starred, 'bi-star' : !createnote_starred}" class="bi"></i></button>                            
                             <button ng-click="create_new_note()"  class="btn btn-sm btn-info">Create <i class="bi bi-arrow-right"></i></button>                            
                         </div>
@@ -1147,17 +1159,27 @@ if(isset($_GET['logout'])) {
                             <p class="text-danger">Error: {{error}}</p>
                         </div>
                         
-                        <!-- note title -->
-                        <h1 class="fw-bold text-white" ng-hide="show_title_edit">
-                            {{update_title}}
-                            <span style="font-size: 16px;"><button ng-click="show_title_edit = true;" class="btn btn-link link-light"><i class="bi bi-pencil-square"></i></button></span>
-                        </h1>
+                        
+
+                        <div class="d-flex">
+
+                            <!-- note title -->
+                            <h1 class="fw-bold text-white" ng-hide="show_title_edit">
+                                {{update_title}}
+                                <span style="font-size: 16px;"><button ng-click="show_title_edit = true;" class="btn btn-link link-light"><i class="bi bi-pencil-square"></i></button></span>
+                            </h1>
+
+
+                            <div class="ms-auto">
+                                <button ng-click="show_view_note_block = false; show_changepass_block = false; show_profile_block = false; show_create_note_block = true;" class="btn btn-link link-danger"><i class="bi bi-x-lg fs-3"></i></button>
+                            </div>
+                        </div>
                         
                         
                         <!-- note title hidden input -->
                         <div class="mt-2 text-end col-xl-8 col-xxl-5" ng-show="show_title_edit">
                             <input style="border-bottom: 1px solid #36bcba;" ng-model="update_title" type="text" class="form-control-plaintext text-white display-4 fw-bold" placeholder="Note title...">
-                            <a style="font-size: 13px;" ng-click="show_title_edit = false;" href="javascript:;" class="link link-danger text-decoration-none">Cancel</a>
+                            <a style="font-size: 13px;" ng-click="show_title_edit = false; update_note();" href="javascript:;" class="link link-success text-decoration-none">Save</a>
                         </div>
                         
                         
