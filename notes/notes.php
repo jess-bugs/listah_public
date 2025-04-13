@@ -837,7 +837,11 @@ if(isset($_GET['logout'])) {
                     <!-- BLOCK - Edit Profile -->
                     <div ng-show="show_profile_block" style="height: 100%;">
 
-                        <h2 class="fw-bold">Account Management</h2>                    
+                        <h2 class="fw-bold">
+                            <button ng-click="show_view_note_block = false; show_changepass_block = false; show_profile_block = false; show_create_note_block = true;" class="btn btn-sm btn-secondary text-decoration-none fs-5 me-1"><i class="bi bi-arrow-left"></i></button> 
+                            <span class="align-bottom">Account Management</span>
+                        </h2>
+                                            
 
                         
                         <div class="mt-3">
