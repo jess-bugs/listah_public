@@ -546,7 +546,7 @@ if(isset($_GET['logout'])) {
 
 
                             <!-- edit profile info -->
-                            <div ng-show="edit_profile_block" class="p-1 rounded d-flex flex-column d-lg-none">
+                            <div ng-show="edit_profile_block" class="p-1 rounded d-flex flex-column d-lg-none" style="height: 100vh;">
                                 
                                 <div class="d-flex align-items-center">
                                     
