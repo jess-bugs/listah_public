@@ -906,7 +906,7 @@ app.controller('angular_controller', function($scope, $http, $timeout, $filter) 
                     title: 'Logging out...',
                     showConfirmButton: false,
                     showCancelButton: false,
-                    timer: 2000,
+                    timer: 500,
                     timerProgressBar: true,
                     allowOutsideClick: false,
                     allowEscapeKey: false,
@@ -915,7 +915,7 @@ app.controller('angular_controller', function($scope, $http, $timeout, $filter) 
                 
                 $timeout(function() {                                        
                     window.location.href = "notes.php?logout=y";
-                }, 2000);
+                }, 500);
                 
             }
             

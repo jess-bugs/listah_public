@@ -11,6 +11,55 @@ include '../../notes/php_config/functions.php';
 
 
 
+function create_first_note($user_id, $username) {
+    
+    $note_title = "Get Started!";
+    $note_content = "Hi there, $username! Welcome to Listah! Access your notes from anywhere, anytime!";
+    $note_starred = false;
+    $note_subject = "Welcome aboard!";
+    
+    $table_name = "notes";
+    $db_name = "listah";
+    
+    
+    $conn = mysqli_connect(DB_HOST, DB_USER, DB_PASS, $db_name);
+    
+    if (!$conn) {
+        die("Database Connection failed: " . mysqli_connect_error());
+    }
+    
+
+    $query = "INSERT INTO $table_name (user_id, title, content, starred, subject) values (?, ?, ?, ?, ?)";
+    $stmt = mysqli_prepare($conn, $query);
+        
+    
+    if($stmt) {
+        
+        mysqli_stmt_bind_param($stmt, "issss", $user_id, $note_title, $note_content, $note_starred, $note_subject);        
+        $exec = mysqli_stmt_execute($stmt);
+        
+        if($exec) {
+            
+            return true;
+            
+        } else  {
+            
+            return false;
+        }
+    }
+    
+    
+}
+
+
+
+
+
+
+
+
+
+
 
 function insert_to_db($insert_username, $insert_password, $insert_fname, $insert_lname, $insert_gender, $insert_profile_pic, $user_id) {
     
@@ -28,23 +77,23 @@ function insert_to_db($insert_username, $insert_password, $insert_fname, $insert
     $query = "INSERT INTO users (user, password, first_name, last_name, gender, image_path, user_id) values (?,?,?,?,?,?,?)";
     $stmt = mysqli_prepare($conn, $query);
     
-
-
+    
+    
     if($stmt) {
         
         mysqli_stmt_bind_param($stmt, "ssssssi", $insert_username, $insert_password, $insert_fname, $insert_lname, $insert_gender, $insert_profile_pic, $user_id);
         $exec = mysqli_stmt_execute($stmt);
-
+        
         if($exec) {
-
+            
             return json_encode([
                 'status' => true,
                 "message" => "User Created!"
             ]);
             
-
+            
         } else {
-
+            
             return json_encode([
                 'status' => false,
                 "message" => "Error: " . mysqli_error($conn)
@@ -53,7 +102,7 @@ function insert_to_db($insert_username, $insert_password, $insert_fname, $insert
         }
         
     } else {
-
+        
         return json_encode([
             'status' => false,
             "message" => "Invalid Statement"
@@ -78,11 +127,11 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         $username = php_sanitize_input($_POST['username']);
         $password = php_sanitize_input($_POST['password']);
         $passwrod_hash = password_hash($password, PASSWORD_DEFAULT);
-
+        
         $fname = php_sanitize_input($_POST['firstname']);
         $lname = php_sanitize_input($_POST['lastname']);
         $gender = php_sanitize_input($_POST['gender']);
-
+        
         $user_id = random_int(100000, 999999);
         $image_path = "";
         
@@ -105,7 +154,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             if (move_uploaded_file($fileTmpPath, $destPath)) {
                 
                 $image_path  = "/listah/notes/profiles/" . $newFileName;
-            
+                
             }
             
         }
@@ -115,33 +164,41 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         
         $create_user = insert_to_db($username, $passwrod_hash, $fname, $lname, $gender, $image_path, $user_id);
         
-
+        
         // decode response
         $database_response = json_decode($create_user, true);
-
+        
         if($database_response['status'] === true) {
-
-            $_SESSION['user_logged_in'] = $database_response['status'];
-            $_SESSION['user_id'] = $user_id;
-
-            echo json_encode([
-                'status' => true,
-                "message" => "Success!",
-                "user_id" => $_SESSION['user_id'],
-                "session_status" => $_SESSION['user_logged_in'],
-            ]);
-
-
+            
+            
+            
+            $is_firstnote_created = create_first_note($user_id, $fname);
+            
+            if($is_firstnote_created) {
+                
+                $_SESSION['user_logged_in'] = $database_response['status'];
+                $_SESSION['user_id'] = $user_id;
+                
+                echo json_encode([
+                    'status' => true,
+                    "message" => "Success!",
+                    "user_id" => $_SESSION['user_id'],
+                    "session_status" => $_SESSION['user_logged_in'],
+                ]);
+                
+            }
+            
+            
             
         } else {
-
+            
             echo json_encode([
                 'status' => $database_response['status'],
                 "message" => $database_response['message']
             ]);
             
         }
-
+        
         
     } else {
         

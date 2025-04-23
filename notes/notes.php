@@ -285,7 +285,7 @@ if(isset($_GET['logout'])) {
                             </div>
                         </div>
                         
-                        <div class="mb-2" style="max-height: 100vh; overflow-y: scroll;">
+                        <div class="mb-2" style="height: 100vh; overflow-y: scroll;">
                             
                             
                             
@@ -546,7 +546,7 @@ if(isset($_GET['logout'])) {
 
 
                             <!-- edit profile info -->
-                            <div ng-show="edit_profile_block" class="p-1 rounded d-flex flex-column d-lg-none" style="height: 100vh;">
+                            <div ng-show="edit_profile_block" class="p-1 rounded d-flex flex-column d-lg-none">
                                 
                                 <div class="d-flex align-items-center">
                                     
@@ -794,7 +794,7 @@ if(isset($_GET['logout'])) {
             
             
             <div class="col-lg-7 col-xl-8 col-xxl-9 d-none d-lg-block p-1" >
-                <div class="rounded-2 p-2" style="min-height: 100vh; background-color: #26282a;">
+                <div class="rounded-2 p-2" style="background-color: #26282a;">
                     
 
                     <!-- header for content -->
