@@ -65,6 +65,32 @@ if(isset($_GET['logout'])) {
     <script src="https://cdnjs.cloudflare.com/ajax/libs/lottie-web/5.12.2/lottie.min.js"></script>
     
     <style>
+
+
+        ::-webkit-scrollbar {
+            width: 5px;
+        }
+
+        /* ::-webkit-scrollbar-track {
+            background: #f0f0f0;
+            border-radius: 10px;
+        } */
+
+
+        ::-webkit-scrollbar-thumb {
+            background-color: #888;
+            border-radius: 10px;
+            border: 1px solid #f0f0f0;
+            width: 1px;
+        }
+
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #555;
+        }
+
+        
+
         @media screen and (max-width: 991px) {
             .sidebar {
                 width: 100%;
