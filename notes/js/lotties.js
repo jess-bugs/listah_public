@@ -9,7 +9,7 @@ $('document').ready(function() {
         renderer: 'svg',
         loop: true,
         autoplay: true,
-        path: "https://www.jessbaggs.com/res/lotties/bar_loading_anim.json" 
+        path: "https://res.jessbaggs.com/res/lotties/bar_loading_anim.json" 
     });
 
 
@@ -22,7 +22,7 @@ $('document').ready(function() {
         renderer: 'svg',
         loop: true,
         autoplay: true,
-        path: "https://www.jessbaggs.com/res/lotties/empty_box_2.json" 
+        path: "https://res.jessbaggs.com/res/lotties/empty_box_2.json" 
     });
 
 })
